@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import Index from "./pages/Index";
 import Profile from "./pages/Profile";
+import VideoAnalysis from "./pages/VideoAnalysis";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,7 +23,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/translate" element={<Index />} />
-              <Route path="/analyse-video" element={<Index />} />
+              <Route path="/analyse-video" element={<VideoAnalysis />} />
               <Route path="/analyse-audio" element={<Index />} />
               <Route path="/analyse-text" element={<Index />} />
               <Route path="/analyse-image" element={<Index />} />
@@ -39,3 +40,4 @@ const App = () => (
 );
 
 export default App;
+
