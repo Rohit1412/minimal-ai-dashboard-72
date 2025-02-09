@@ -7,7 +7,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-900">
       <Sidebar />
-      <main className="pl-[80px] lg:pl-[240px] p-8">
+      <main className="p-8 md:ml-[120px] lg:ml-[280px]">
         <div className="max-w-7xl mx-auto text-center">
           <header className="mb-8">
             <h1 className="text-3xl font-bold text-white">Dashboard</h1>
