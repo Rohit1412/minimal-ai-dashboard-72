@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SelectedFeatures {
   labels: boolean;
@@ -20,8 +21,10 @@ const FeatureSelection = ({
   setSelectedFeatures,
   isRunningAll,
 }: FeatureSelectionProps) => {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="flex gap-4 flex-wrap">
+    <div className={`flex gap-2 ${isMobile ? 'flex-wrap justify-center' : 'flex-wrap'}`}>
       {Object.entries(selectedFeatures).map(([feature, isSelected]) => (
         <Button
           key={feature}
@@ -33,7 +36,7 @@ const FeatureSelection = ({
             }))
           }
           disabled={isRunningAll}
-          className={`capitalize dark:text-white ${
+          className={`capitalize dark:text-white ${isMobile ? 'text-sm px-3' : ''} ${
             isSelected 
               ? 'dark:bg-primary dark:hover:bg-primary/90' 
               : 'dark:bg-[#2A2F3C] dark:hover:bg-[#3A3F4C]'

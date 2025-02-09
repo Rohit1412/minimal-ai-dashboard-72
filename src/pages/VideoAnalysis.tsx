@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import Sidebar from "@/components/Sidebar";
@@ -8,6 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import VideoInput from "@/components/video/VideoInput";
 import FeatureSelection from "@/components/video/FeatureSelection";
 import AnalysisResults from "@/components/video/AnalysisResults";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface AnalysisResults {
   labels?: string[];
@@ -31,6 +31,7 @@ const VideoAnalysis = () => {
     faces: false
   });
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -111,7 +112,7 @@ const VideoAnalysis = () => {
   return (
     <div className="min-h-screen bg-background">
       <Sidebar />
-      <main className="min-h-screen w-[80vw] ml-auto mr-[10vw] px-8 pt-5 pb-8">
+      <main className={`min-h-screen ${isMobile ? 'w-full px-4' : 'w-[80vw] ml-auto mr-[10vw] px-8'} pt-5 pb-8`}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -142,7 +143,7 @@ const VideoAnalysis = () => {
               />
 
               {videoUrl && (
-                <div className="aspect-video w-full bg-black/10 rounded-lg overflow-hidden">
+                <div className="aspect-video w-full bg-black/10 rounded-lg overflow-hidden" style={{ height: '40vh' }}>
                   <iframe
                     src={videoUrl}
                     className="w-full h-full"

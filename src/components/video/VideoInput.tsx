@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Upload, Play } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface VideoInputProps {
   videoUrl: string;
@@ -24,8 +25,10 @@ const VideoInput = ({
   videoFile,
   isRunningAll,
 }: VideoInputProps) => {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="flex gap-4">
+    <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-4`}>
       <Input
         type="url"
         placeholder="Enter video URL"
@@ -44,7 +47,7 @@ const VideoInput = ({
         />
         <Button 
           variant="outline" 
-          className="gap-2 dark:bg-[#2A2F3C] dark:hover:bg-[#3A3F4C] dark:text-white"
+          className="w-full gap-2 dark:bg-[#2A2F3C] dark:hover:bg-[#3A3F4C] dark:text-white"
           disabled={isRunningAll}
         >
           <Upload className="w-4 h-4" />
