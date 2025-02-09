@@ -8,7 +8,7 @@ const Index = () => {
     <div className="min-h-screen bg-gray-900">
       <Sidebar />
       <main className="pl-[80px] lg:pl-[240px] p-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto text-center">
           <header className="mb-8">
             <h1 className="text-3xl font-bold text-white">Dashboard</h1>
             <p className="text-gray-400 mt-2">AI Analytics Overview</p>

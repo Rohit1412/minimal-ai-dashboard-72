@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   ChevronLeft, 
   Menu,
@@ -30,12 +30,30 @@ const Sidebar = () => {
     <motion.div
       initial={false}
       animate={{ width: isCollapsed ? "80px" : "240px" }}
-      className="h-screen bg-gray-900 border-r border-gray-800 flex flex-col fixed left-0 top-0 z-50"
+      className="h-screen bg-gray-900 border-r border-gray-800 flex flex-col fixed left-0 top-0 z-[100] shadow-xl"
     >
       <div className="flex items-center justify-between p-4 border-b border-gray-800">
-        {!isCollapsed && (
-          <span className="text-xl font-semibold text-white">AI Analysis</span>
-        )}
+        <AnimatePresence mode="wait">
+          {!isCollapsed && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="flex items-center space-x-2"
+            >
+              <span className="text-xl font-semibold text-white">AI</span>
+              <motion.span
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
+                className="text-xl font-semibold text-white"
+              >
+                Analysis
+              </motion.span>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="p-2 hover:bg-gray-800 rounded-lg transition-colors text-gray-400 hover:text-white"
@@ -53,9 +71,18 @@ const Sidebar = () => {
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-colors text-gray-400 hover:text-white group"
               >
                 <item.icon size={20} className="group-hover:text-purple-400" />
-                {!isCollapsed && (
-                  <span>{item.label}</span>
-                )}
+                <AnimatePresence mode="wait">
+                  {!isCollapsed && (
+                    <motion.span
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                    >
+                      {item.label}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </a>
             </li>
           ))}
