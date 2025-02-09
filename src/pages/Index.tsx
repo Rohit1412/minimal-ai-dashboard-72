@@ -1,4 +1,3 @@
-
 import { Card } from "@/components/ui/card";
 import Sidebar from "@/components/Sidebar";
 import { BarChart3, BrainCircuit, Sparkles, TrendingUp } from "lucide-react";
@@ -17,9 +16,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="h-[40px] w-full bg-background fixed top-0 z-40 border-b border-border" />
+      <div className="h-[80px] w-full bg-background fixed top-0 z-40 border-b border-border flex items-center justify-center">
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
+          AI tools for daily use
+        </h1>
+      </div>
       <Sidebar />
-      <main className={`min-h-screen ${isMobile ? 'w-full px-4' : 'w-[80vw] ml-auto mr-[10vw] px-8'} pt-[calc(40px+10vh)] pb-8`}>
+      <main className={`min-h-screen ${isMobile ? 'w-full px-4' : 'w-[80vw] ml-auto mr-[10vw] px-8'} pt-[calc(80px+10vh)] pb-8`}>
         <motion.header 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
