@@ -8,6 +8,7 @@ import { ThemeProvider } from "./providers/ThemeProvider";
 import Index from "./pages/Index";
 import Profile from "./pages/Profile";
 import VideoAnalysis from "./pages/VideoAnalysis";
+import ImageAnalysis from "./pages/ImageAnalysis";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,7 +27,7 @@ const App = () => (
               <Route path="/analyse-video" element={<VideoAnalysis />} />
               <Route path="/analyse-audio" element={<Index />} />
               <Route path="/analyse-text" element={<Index />} />
-              <Route path="/analyse-image" element={<Index />} />
+              <Route path="/analyse-image" element={<ImageAnalysis />} />
               <Route path="/history" element={<Index />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<Index />} />
@@ -40,4 +41,3 @@ const App = () => (
 );
 
 export default App;
-
