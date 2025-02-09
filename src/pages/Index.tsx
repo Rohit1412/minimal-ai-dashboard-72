@@ -15,7 +15,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Sidebar />
-      <main className="min-h-screen w-[80vw] mx-auto px-8 pt-5 pb-8">
+      <main className="min-h-screen w-[80vw] ml-auto mr-[10vw] px-8 pt-5 pb-8">
         <div className="w-full">
           <motion.header 
             initial={{ opacity: 0, y: 20 }}
@@ -23,8 +23,10 @@ const Index = () => {
             transition={{ duration: 0.5 }}
             className="mb-8 text-left"
           >
-            <h2 className="text-2xl font-medium text-muted-foreground">Welcome,</h2>
-            <h1 className="text-4xl font-bold text-primary mt-2">{userData.name}</h1>
+            <div className="flex items-center gap-2">
+              <h2 className="text-3xl font-bold text-muted-foreground">Welcome,</h2>
+              <h1 className="text-3xl font-bold text-primary">{userData.name}</h1>
+            </div>
             <p className="text-xl text-muted-foreground mt-4">
               Unlock the power of AI analytics with our comprehensive suite of tools
             </p>
