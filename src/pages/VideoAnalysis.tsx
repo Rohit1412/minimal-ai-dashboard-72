@@ -8,11 +8,20 @@ import { motion } from "framer-motion";
 import { Video, Upload, Play, FileDown, ChartBar } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
+interface AnalysisResults {
+  labels?: string[];
+  objects?: string[];
+  texts?: string[];
+  explicit?: string;
+  speeches?: string[];
+  faces?: string[];
+}
+
 const VideoAnalysis = () => {
   const [videoUrl, setVideoUrl] = useState("");
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResults, setAnalysisResults] = useState<null | any>(null);
+  const [analysisResults, setAnalysisResults] = useState<AnalysisResults | null>(null);
   const [selectedFeatures, setSelectedFeatures] = useState({
     labels: true,
     objects: false,
@@ -54,7 +63,7 @@ const VideoAnalysis = () => {
     await new Promise(resolve => setTimeout(resolve, 2000)); // Simulated delay
     
     // Simulated results based on selected features
-    const results: any = {};
+    const results: AnalysisResults = {};
     if (selectedFeatures.labels) results.labels = ["person", "indoor", "speaking"];
     if (selectedFeatures.objects) results.objects = ["desk", "computer", "chair"];
     if (selectedFeatures.texts) results.texts = ["Hello", "World"];
@@ -197,7 +206,7 @@ const VideoAnalysis = () => {
                               ))}
                             </ul>
                           ) : (
-                            <p>{results}</p>
+                            <p>{String(results)}</p>
                           )}
                         </div>
                       </div>
@@ -214,4 +223,3 @@ const VideoAnalysis = () => {
 };
 
 export default VideoAnalysis;
-
