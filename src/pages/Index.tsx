@@ -31,7 +31,7 @@ const Index = () => {
           </motion.header>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="p-6 backdrop-blur-sm bg-card/80 border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+            <Card className="p-6 backdrop-blur-sm bg-background/80 border-border shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">API Calls</p>
@@ -43,7 +43,7 @@ const Index = () => {
               </div>
             </Card>
 
-            <Card className="p-6 backdrop-blur-sm bg-card/80 border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+            <Card className="p-6 backdrop-blur-sm bg-background/80 border-border shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Data Analysed</p>
@@ -55,7 +55,7 @@ const Index = () => {
               </div>
             </Card>
 
-            <Card className="p-6 backdrop-blur-sm bg-card/80 border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+            <Card className="p-6 backdrop-blur-sm bg-background/80 border-border shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Accuracy</p>
@@ -67,12 +67,12 @@ const Index = () => {
               </div>
             </Card>
 
-            <Card className="col-span-1 md:col-span-2 lg:col-span-3 p-6 backdrop-blur-sm bg-card/80 border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+            <Card className="col-span-1 md:col-span-2 lg:col-span-3 p-4 backdrop-blur-sm bg-background/80 border-border shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-foreground">Performance Analytics</h3>
                 <BarChart3 className="w-5 h-5 text-muted-foreground" />
               </div>
-              <div className="h-64 flex items-center justify-center border-2 border-dashed border-muted rounded-lg">
+              <div className="h-48 flex items-center justify-center border-2 border-dashed border-muted rounded-lg">
                 <p className="text-muted-foreground">Analytics Chart Placeholder</p>
               </div>
             </Card>

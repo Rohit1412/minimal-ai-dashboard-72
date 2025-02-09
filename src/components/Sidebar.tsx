@@ -17,7 +17,7 @@ import {
 import { useTheme } from "@/providers/ThemeProvider";
 
 const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true); // Changed to true for default collapsed state
   const { theme, toggleTheme } = useTheme();
 
   const menuItems = [
@@ -41,9 +41,13 @@ const Sidebar = () => {
           duration: 0.3,
           ease: "easeInOut"
         }}
-        className="h-[calc(100vh-40px)] bg-gray-900 border border-gray-800 flex flex-col rounded-xl shadow-xl"
+        className={`h-[calc(100vh-40px)] ${
+          theme === 'dark' ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-200'
+        } border flex flex-col rounded-xl shadow-xl`}
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-800">
+        <div className={`flex items-center justify-between p-4 border-b ${
+          theme === 'dark' ? 'border-gray-800' : 'border-gray-200'
+        }`}>
           <AnimatePresence mode="wait" initial={false}>
             {!isCollapsed && (
               <motion.div
@@ -53,8 +57,12 @@ const Sidebar = () => {
                 transition={{ duration: 0.2, ease: "easeOut" }}
                 className="flex items-center space-x-2"
               >
-                <span className="text-xl font-semibold text-white">AI</span>
-                <motion.span className="text-xl font-semibold text-white">
+                <span className={`text-xl font-semibold ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>AI</span>
+                <motion.span className={`text-xl font-semibold ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
                   Analysis
                 </motion.span>
               </motion.div>
@@ -63,7 +71,11 @@ const Sidebar = () => {
           <motion.button
             layout
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-2 hover:bg-gray-800 rounded-lg transition-colors text-gray-400 hover:text-white flex items-center justify-center w-8 h-8"
+            className={`p-2 rounded-lg transition-colors flex items-center justify-center w-8 h-8 ${
+              theme === 'dark' 
+                ? 'hover:bg-gray-800 text-gray-400 hover:text-white' 
+                : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
+            }`}
           >
             {isCollapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}
           </motion.button>
@@ -75,7 +87,11 @@ const Sidebar = () => {
               <li key={item.label}>
                 <a
                   href={item.href}
-                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-colors text-gray-400 hover:text-white group"
+                  className={`flex items-center space-x-3 p-3 rounded-lg transition-colors group ${
+                    theme === 'dark'
+                      ? 'hover:bg-gray-800 text-gray-400 hover:text-white'
+                      : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
+                  }`}
                 >
                   <item.icon size={20} className="group-hover:text-purple-400" />
                   <AnimatePresence mode="wait" initial={false}>
@@ -96,10 +112,16 @@ const Sidebar = () => {
           </ul>
         </nav>
 
-        <div className="p-4 border-t border-gray-800">
+        <div className={`p-4 border-t ${
+          theme === 'dark' ? 'border-gray-800' : 'border-gray-200'
+        }`}>
           <button
             onClick={toggleTheme}
-            className="w-full flex items-center justify-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-colors text-gray-400 hover:text-white group"
+            className={`w-full flex items-center justify-center space-x-3 p-3 rounded-lg transition-colors group ${
+              theme === 'dark'
+                ? 'hover:bg-gray-800 text-gray-400 hover:text-white'
+                : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
+            }`}
           >
             {theme === 'dark' ? (
               <Sun size={20} className="group-hover:text-yellow-400" />
