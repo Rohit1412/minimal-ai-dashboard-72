@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import Sidebar from "@/components/Sidebar";
 import { BarChart3, BrainCircuit, Sparkles, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
   const userData = {
@@ -12,10 +13,13 @@ const Index = () => {
     accuracy: 94.3
   };
 
+  const isMobile = useIsMobile();
+
   return (
     <div className="min-h-screen bg-background">
+      <div className="h-[40px] w-full bg-background fixed top-0 z-40 border-b border-border" />
       <Sidebar />
-      <main className="min-h-screen w-[80vw] ml-auto mr-[10vw] px-8 pt-10vh pb-8">
+      <main className={`min-h-screen ${isMobile ? 'w-full px-4' : 'w-[80vw] ml-auto mr-[10vw] px-8'} pt-[calc(40px+10vh)] pb-8`}>
         <motion.header 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
