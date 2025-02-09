@@ -11,6 +11,7 @@ interface VideoInputProps {
   runAllAnalysis: () => void;
   isAnalyzing: boolean;
   videoFile: File | null;
+  isRunningAll: boolean;
 }
 
 const VideoInput = ({
@@ -21,6 +22,7 @@ const VideoInput = ({
   runAllAnalysis,
   isAnalyzing,
   videoFile,
+  isRunningAll,
 }: VideoInputProps) => {
   return (
     <div className="flex gap-4">
@@ -29,7 +31,8 @@ const VideoInput = ({
         placeholder="Enter video URL"
         value={videoUrl}
         onChange={(e) => setVideoUrl(e.target.value)}
-        className="flex-1"
+        className="flex-1 dark:bg-[#2A2F3C] dark:text-white dark:border-white/10"
+        disabled={isRunningAll}
       />
       <div className="relative">
         <Input
@@ -37,16 +40,21 @@ const VideoInput = ({
           accept="video/*"
           onChange={handleFileChange}
           className="absolute inset-0 opacity-0 cursor-pointer"
+          disabled={isRunningAll}
         />
-        <Button variant="outline" className="gap-2 dark:bg-[#2A2F3C] dark:hover:bg-[#3A3F4C]">
+        <Button 
+          variant="outline" 
+          className="gap-2 dark:bg-[#2A2F3C] dark:hover:bg-[#3A3F4C] dark:text-white"
+          disabled={isRunningAll}
+        >
           <Upload className="w-4 h-4" />
           Upload Video
         </Button>
       </div>
       <Button
         onClick={handleAnalyze}
-        disabled={isAnalyzing || (!videoUrl && !videoFile)}
-        className="gap-2 dark:bg-primary dark:hover:bg-primary/90"
+        disabled={isAnalyzing || (!videoUrl && !videoFile) || isRunningAll}
+        className="gap-2 dark:bg-primary dark:hover:bg-primary/90 dark:text-white"
       >
         {isAnalyzing ? (
           "Analyzing..."
@@ -60,7 +68,7 @@ const VideoInput = ({
       <Button
         onClick={runAllAnalysis}
         disabled={isAnalyzing || (!videoUrl && !videoFile)}
-        className="gap-2 dark:bg-[#4A5568] dark:hover:bg-[#4A5568]/90"
+        className="gap-2 dark:bg-[#4A5568] dark:hover:bg-[#4A5568]/90 dark:text-white"
       >
         Run All Analysis
       </Button>

@@ -12,11 +12,13 @@ interface SelectedFeatures {
 interface FeatureSelectionProps {
   selectedFeatures: SelectedFeatures;
   setSelectedFeatures: React.Dispatch<React.SetStateAction<SelectedFeatures>>;
+  isRunningAll: boolean;
 }
 
 const FeatureSelection = ({
   selectedFeatures,
   setSelectedFeatures,
+  isRunningAll,
 }: FeatureSelectionProps) => {
   return (
     <div className="flex gap-4 flex-wrap">
@@ -30,7 +32,12 @@ const FeatureSelection = ({
               [feature]: !prev[feature as keyof typeof selectedFeatures]
             }))
           }
-          className={`capitalize dark:${isSelected ? 'bg-primary hover:bg-primary/90' : 'bg-[#2A2F3C] hover:bg-[#3A3F4C]'}`}
+          disabled={isRunningAll}
+          className={`capitalize dark:text-white ${
+            isSelected 
+              ? 'dark:bg-primary dark:hover:bg-primary/90' 
+              : 'dark:bg-[#2A2F3C] dark:hover:bg-[#3A3F4C]'
+          }`}
         >
           {feature}
         </Button>

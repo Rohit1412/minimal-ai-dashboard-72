@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import Sidebar from "@/components/Sidebar";
@@ -20,6 +21,7 @@ const VideoAnalysis = () => {
   const [videoUrl, setVideoUrl] = useState("");
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isRunningAll, setIsRunningAll] = useState(false);
   const [analysisResults, setAnalysisResults] = useState<AnalysisResults | null>(null);
   const [selectedFeatures, setSelectedFeatures] = useState({
     labels: true,
@@ -47,6 +49,7 @@ const VideoAnalysis = () => {
   };
 
   const runAllAnalysis = () => {
+    setIsRunningAll(true);
     setSelectedFeatures({
       labels: true,
       objects: true,
@@ -81,6 +84,7 @@ const VideoAnalysis = () => {
 
     setAnalysisResults(results);
     setIsAnalyzing(false);
+    setIsRunningAll(false);
     
     toast({
       title: "Analysis Complete",
@@ -115,7 +119,7 @@ const VideoAnalysis = () => {
         >
           <div className="flex items-center gap-2 mb-8">
             <Video className="w-6 h-6 text-primary" />
-            <h1 className="text-3xl font-bold text-primary">Video Analysis</h1>
+            <h1 className="text-3xl font-bold text-primary dark:text-white">Video Analysis</h1>
           </div>
 
           <Card className="p-6 backdrop-blur-sm bg-background/80 border-border shadow-lg dark:bg-[#1A1F2C] dark:border-white/10">
@@ -128,11 +132,13 @@ const VideoAnalysis = () => {
                 runAllAnalysis={runAllAnalysis}
                 isAnalyzing={isAnalyzing}
                 videoFile={videoFile}
+                isRunningAll={isRunningAll}
               />
 
               <FeatureSelection
                 selectedFeatures={selectedFeatures}
                 setSelectedFeatures={setSelectedFeatures}
+                isRunningAll={isRunningAll}
               />
 
               {videoUrl && (
