@@ -11,10 +11,14 @@ import {
   Image as ImageIcon,
   History,
   Settings,
+  Sun,
+  Moon,
 } from "lucide-react";
+import { useTheme } from "@/providers/ThemeProvider";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const menuItems = [
     { icon: Languages, label: "Translate", href: "/translate" },
@@ -50,12 +54,7 @@ const Sidebar = () => {
                 className="flex items-center space-x-2"
               >
                 <span className="text-xl font-semibold text-white">AI</span>
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="text-xl font-semibold text-white"
-                >
+                <motion.span className="text-xl font-semibold text-white">
                   Analysis
                 </motion.span>
               </motion.div>
@@ -96,6 +95,31 @@ const Sidebar = () => {
             ))}
           </ul>
         </nav>
+
+        <div className="p-4 border-t border-gray-800">
+          <button
+            onClick={toggleTheme}
+            className="w-full flex items-center justify-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-colors text-gray-400 hover:text-white group"
+          >
+            {theme === 'dark' ? (
+              <Sun size={20} className="group-hover:text-yellow-400" />
+            ) : (
+              <Moon size={20} className="group-hover:text-blue-400" />
+            )}
+            <AnimatePresence mode="wait" initial={false}>
+              {!isCollapsed && (
+                <motion.span
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                >
+                  {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+        </div>
       </motion.div>
     </div>
   );
