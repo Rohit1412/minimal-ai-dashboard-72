@@ -13,7 +13,6 @@ interface AnalysisResults {
   objects?: string[];
   texts?: string[];
   explicit?: string;
-  speeches?: string[];
   faces?: string[];
 }
 
@@ -27,7 +26,6 @@ const VideoAnalysis = () => {
     objects: false,
     texts: false,
     explicit: false,
-    speeches: false,
     faces: false
   });
   const { toast } = useToast();
@@ -46,6 +44,17 @@ const VideoAnalysis = () => {
         });
       }
     }
+  };
+
+  const runAllAnalysis = () => {
+    setSelectedFeatures({
+      labels: true,
+      objects: true,
+      texts: true,
+      explicit: true,
+      faces: true
+    });
+    handleAnalyze();
   };
 
   const handleAnalyze = async () => {
@@ -68,7 +77,6 @@ const VideoAnalysis = () => {
     if (selectedFeatures.objects) results.objects = ["desk", "computer", "chair"];
     if (selectedFeatures.texts) results.texts = ["Hello", "World"];
     if (selectedFeatures.explicit) results.explicit = "UNLIKELY";
-    if (selectedFeatures.speeches) results.speeches = ["transcribed text example"];
     if (selectedFeatures.faces) results.faces = ["joy: 0.8", "surprise: 0.2"];
 
     setAnalysisResults(results);
@@ -127,7 +135,7 @@ const VideoAnalysis = () => {
                     onChange={handleFileChange}
                     className="absolute inset-0 opacity-0 cursor-pointer"
                   />
-                  <Button variant="outline" className="gap-2">
+                  <Button variant="outline" className="gap-2 dark:bg-[#2A2F3C] dark:hover:bg-[#3A3F4C]">
                     <Upload className="w-4 h-4" />
                     Upload Video
                   </Button>
@@ -135,7 +143,7 @@ const VideoAnalysis = () => {
                 <Button
                   onClick={handleAnalyze}
                   disabled={isAnalyzing || (!videoUrl && !videoFile)}
-                  className="gap-2"
+                  className="gap-2 dark:bg-primary dark:hover:bg-primary/90"
                 >
                   {isAnalyzing ? (
                     "Analyzing..."
@@ -146,9 +154,16 @@ const VideoAnalysis = () => {
                     </>
                   )}
                 </Button>
+                <Button
+                  onClick={runAllAnalysis}
+                  disabled={isAnalyzing || (!videoUrl && !videoFile)}
+                  className="gap-2 dark:bg-[#4A5568] dark:hover:bg-[#4A5568]/90"
+                >
+                  Run All Analysis
+                </Button>
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="flex gap-4 flex-wrap">
                 {Object.entries(selectedFeatures).map(([feature, isSelected]) => (
                   <Button
                     key={feature}
@@ -159,7 +174,7 @@ const VideoAnalysis = () => {
                         [feature]: !prev[feature as keyof typeof selectedFeatures]
                       }))
                     }
-                    className="capitalize"
+                    className={`capitalize dark:${isSelected ? 'bg-primary hover:bg-primary/90' : 'bg-[#2A2F3C] hover:bg-[#3A3F4C]'}`}
                   >
                     {feature}
                   </Button>
@@ -187,7 +202,7 @@ const VideoAnalysis = () => {
                     <Button
                       variant="outline"
                       onClick={handleDownload}
-                      className="gap-2"
+                      className="gap-2 dark:bg-[#2A2F3C] dark:hover:bg-[#3A3F4C]"
                     >
                       <FileDown className="w-4 h-4" />
                       Download Results
