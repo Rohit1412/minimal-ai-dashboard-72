@@ -13,9 +13,9 @@ const Index = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-background transition-all duration-300">
+    <div className="min-h-screen bg-background">
       <Sidebar />
-      <main className="flex-1 p-8 transition-all duration-300 ml-[80px] lg:ml-[240px] max-w-6xl mx-auto">
+      <main className="min-h-screen w-[80vw] mx-auto px-8 pt-5 pb-8">
         <div className="w-full">
           <motion.header 
             initial={{ opacity: 0, y: 20 }}

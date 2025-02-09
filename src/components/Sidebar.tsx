@@ -31,7 +31,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="fixed left-5 top-5 z-[100]">
+    <div className="fixed left-0 top-0 z-50 p-5">
       <motion.div
         initial={false}
         animate={{ 
