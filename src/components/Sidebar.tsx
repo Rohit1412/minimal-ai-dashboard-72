@@ -13,11 +13,12 @@ import {
   Settings,
   Sun,
   Moon,
+  UserCircle2
 } from "lucide-react";
 import { useTheme } from "@/providers/ThemeProvider";
 
 const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(true); // Changed to true for default collapsed state
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const { theme, toggleTheme } = useTheme();
 
   const menuItems = [
@@ -27,6 +28,7 @@ const Sidebar = () => {
     { icon: FileText, label: "Analyse Text", href: "/analyse-text" },
     { icon: ImageIcon, label: "Analyse Image", href: "/analyse-image" },
     { icon: History, label: "History", href: "/history" },
+    { icon: UserCircle2, label: "Profile", href: "/profile" },
     { icon: Settings, label: "Settings", href: "/settings" },
   ];
 
