@@ -13,7 +13,8 @@ import {
   Settings,
   Sun,
   Moon,
-  UserCircle2
+  UserCircle2,
+  Home
 } from "lucide-react";
 import { useTheme } from "@/providers/ThemeProvider";
 
@@ -22,6 +23,7 @@ const Sidebar = () => {
   const { theme, toggleTheme } = useTheme();
 
   const menuItems = [
+    { icon: Home, label: "Home", href: "/" },
     { icon: Languages, label: "Translate", href: "/translate" },
     { icon: Video, label: "Analyse Video", href: "/analyse-video" },
     { icon: AudioLines, label: "Analyse Audio", href: "/analyse-audio" },
