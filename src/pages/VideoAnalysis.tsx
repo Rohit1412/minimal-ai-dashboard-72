@@ -5,20 +5,45 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Sidebar from "@/components/Sidebar";
 import { motion } from "framer-motion";
-import { Video, Play, FileDown, ChartBar } from "lucide-react";
+import { Video, Upload, Play, FileDown, ChartBar } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 const VideoAnalysis = () => {
   const [videoUrl, setVideoUrl] = useState("");
+  const [videoFile, setVideoFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResults, setAnalysisResults] = useState<null | any>(null);
+  const [selectedFeatures, setSelectedFeatures] = useState({
+    labels: true,
+    objects: false,
+    texts: false,
+    explicit: false,
+    speeches: false,
+    faces: false
+  });
   const { toast } = useToast();
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.type.startsWith('video/')) {
+        setVideoFile(file);
+        setVideoUrl(URL.createObjectURL(file));
+      } else {
+        toast({
+          title: "Error",
+          description: "Please upload a valid video file",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
   const handleAnalyze = async () => {
-    if (!videoUrl) {
+    if (!videoUrl && !videoFile) {
       toast({
         title: "Error",
-        description: "Please enter a video URL first",
+        description: "Please provide a video URL or upload a file",
         variant: "destructive",
       });
       return;
@@ -28,15 +53,16 @@ const VideoAnalysis = () => {
     // API integration will be added here
     await new Promise(resolve => setTimeout(resolve, 2000)); // Simulated delay
     
-    // Simulated results
-    setAnalysisResults({
-      summary: "Sample video analysis results will appear here.",
-      metrics: {
-        duration: "3:45",
-        engagement: "85%",
-        quality: "HD",
-      }
-    });
+    // Simulated results based on selected features
+    const results: any = {};
+    if (selectedFeatures.labels) results.labels = ["person", "indoor", "speaking"];
+    if (selectedFeatures.objects) results.objects = ["desk", "computer", "chair"];
+    if (selectedFeatures.texts) results.texts = ["Hello", "World"];
+    if (selectedFeatures.explicit) results.explicit = "UNLIKELY";
+    if (selectedFeatures.speeches) results.speeches = ["transcribed text example"];
+    if (selectedFeatures.faces) results.faces = ["joy: 0.8", "surprise: 0.2"];
+
+    setAnalysisResults(results);
     setIsAnalyzing(false);
     
     toast({
@@ -85,9 +111,21 @@ const VideoAnalysis = () => {
                   onChange={(e) => setVideoUrl(e.target.value)}
                   className="flex-1"
                 />
+                <div className="relative">
+                  <Input
+                    type="file"
+                    accept="video/*"
+                    onChange={handleFileChange}
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                  <Button variant="outline" className="gap-2">
+                    <Upload className="w-4 h-4" />
+                    Upload Video
+                  </Button>
+                </div>
                 <Button
                   onClick={handleAnalyze}
-                  disabled={isAnalyzing || !videoUrl}
+                  disabled={isAnalyzing || (!videoUrl && !videoFile)}
                   className="gap-2"
                 >
                   {isAnalyzing ? (
@@ -99,6 +137,24 @@ const VideoAnalysis = () => {
                     </>
                   )}
                 </Button>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4">
+                {Object.entries(selectedFeatures).map(([feature, isSelected]) => (
+                  <Button
+                    key={feature}
+                    variant={isSelected ? "default" : "outline"}
+                    onClick={() =>
+                      setSelectedFeatures(prev => ({
+                        ...prev,
+                        [feature]: !prev[feature as keyof typeof selectedFeatures]
+                      }))
+                    }
+                    className="capitalize"
+                  >
+                    {feature}
+                  </Button>
+                ))}
               </div>
 
               {videoUrl && (
@@ -130,30 +186,22 @@ const VideoAnalysis = () => {
                   </div>
                   
                   <Card className="p-4 dark:bg-[#1A1F2C] dark:border-white/10">
-                    <div className="grid grid-cols-3 gap-4 mb-4">
-                      <div>
-                        <p className="text-sm text-muted-foreground">Duration</p>
-                        <p className="text-lg font-semibold">
-                          {analysisResults.metrics.duration}
-                        </p>
+                    {Object.entries(analysisResults).map(([feature, results]) => (
+                      <div key={feature} className="mb-4">
+                        <h3 className="text-lg font-semibold capitalize mb-2">{feature}</h3>
+                        <div className="pl-4">
+                          {Array.isArray(results) ? (
+                            <ul className="list-disc pl-4">
+                              {results.map((result, index) => (
+                                <li key={index}>{result}</li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p>{results}</p>
+                          )}
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Engagement</p>
-                        <p className="text-lg font-semibold">
-                          {analysisResults.metrics.engagement}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Quality</p>
-                        <p className="text-lg font-semibold">
-                          {analysisResults.metrics.quality}
-                        </p>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Summary</p>
-                      <p className="mt-1">{analysisResults.summary}</p>
-                    </div>
+                    ))}
                   </Card>
                 </div>
               )}
