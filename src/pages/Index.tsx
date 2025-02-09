@@ -15,8 +15,8 @@ const Index = () => {
   return (
     <div className="flex min-h-screen bg-background transition-all duration-300">
       <Sidebar />
-      <main className="flex-1 p-8 transition-all duration-300 ml-[80px] lg:ml-[240px] max-w-6xl mx-auto">
-        <div className="w-full">
+      <main className="flex-1 p-8 transition-all duration-300 ml-[80px] lg:ml-[240px]">
+        <div className="max-w-7xl mx-auto">
           <motion.header 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
