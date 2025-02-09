@@ -1,12 +1,12 @@
-
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import Sidebar from "@/components/Sidebar";
 import { motion } from "framer-motion";
-import { Video, Upload, Play, FileDown, ChartBar } from "lucide-react";
+import { Video } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import VideoInput from "@/components/video/VideoInput";
+import FeatureSelection from "@/components/video/FeatureSelection";
+import AnalysisResults from "@/components/video/AnalysisResults";
 
 interface AnalysisResults {
   labels?: string[];
@@ -120,66 +120,20 @@ const VideoAnalysis = () => {
 
           <Card className="p-6 backdrop-blur-sm bg-background/80 border-border shadow-lg dark:bg-[#1A1F2C] dark:border-white/10">
             <div className="space-y-4">
-              <div className="flex gap-4">
-                <Input
-                  type="url"
-                  placeholder="Enter video URL"
-                  value={videoUrl}
-                  onChange={(e) => setVideoUrl(e.target.value)}
-                  className="flex-1"
-                />
-                <div className="relative">
-                  <Input
-                    type="file"
-                    accept="video/*"
-                    onChange={handleFileChange}
-                    className="absolute inset-0 opacity-0 cursor-pointer"
-                  />
-                  <Button variant="outline" className="gap-2 dark:bg-[#2A2F3C] dark:hover:bg-[#3A3F4C]">
-                    <Upload className="w-4 h-4" />
-                    Upload Video
-                  </Button>
-                </div>
-                <Button
-                  onClick={handleAnalyze}
-                  disabled={isAnalyzing || (!videoUrl && !videoFile)}
-                  className="gap-2 dark:bg-primary dark:hover:bg-primary/90"
-                >
-                  {isAnalyzing ? (
-                    "Analyzing..."
-                  ) : (
-                    <>
-                      <Play className="w-4 h-4" />
-                      Analyze
-                    </>
-                  )}
-                </Button>
-                <Button
-                  onClick={runAllAnalysis}
-                  disabled={isAnalyzing || (!videoUrl && !videoFile)}
-                  className="gap-2 dark:bg-[#4A5568] dark:hover:bg-[#4A5568]/90"
-                >
-                  Run All Analysis
-                </Button>
-              </div>
+              <VideoInput
+                videoUrl={videoUrl}
+                setVideoUrl={setVideoUrl}
+                handleFileChange={handleFileChange}
+                handleAnalyze={handleAnalyze}
+                runAllAnalysis={runAllAnalysis}
+                isAnalyzing={isAnalyzing}
+                videoFile={videoFile}
+              />
 
-              <div className="flex gap-4 flex-wrap">
-                {Object.entries(selectedFeatures).map(([feature, isSelected]) => (
-                  <Button
-                    key={feature}
-                    variant={isSelected ? "default" : "outline"}
-                    onClick={() =>
-                      setSelectedFeatures(prev => ({
-                        ...prev,
-                        [feature]: !prev[feature as keyof typeof selectedFeatures]
-                      }))
-                    }
-                    className={`capitalize dark:${isSelected ? 'bg-primary hover:bg-primary/90' : 'bg-[#2A2F3C] hover:bg-[#3A3F4C]'}`}
-                  >
-                    {feature}
-                  </Button>
-                ))}
-              </div>
+              <FeatureSelection
+                selectedFeatures={selectedFeatures}
+                setSelectedFeatures={setSelectedFeatures}
+              />
 
               {videoUrl && (
                 <div className="aspect-video w-full bg-black/10 rounded-lg overflow-hidden">
@@ -193,41 +147,10 @@ const VideoAnalysis = () => {
               )}
 
               {analysisResults && (
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-semibold flex items-center gap-2">
-                      <ChartBar className="w-5 h-5" />
-                      Analysis Results
-                    </h2>
-                    <Button
-                      variant="outline"
-                      onClick={handleDownload}
-                      className="gap-2 dark:bg-[#2A2F3C] dark:hover:bg-[#3A3F4C]"
-                    >
-                      <FileDown className="w-4 h-4" />
-                      Download Results
-                    </Button>
-                  </div>
-                  
-                  <Card className="p-4 dark:bg-[#1A1F2C] dark:border-white/10">
-                    {Object.entries(analysisResults).map(([feature, results]) => (
-                      <div key={feature} className="mb-4">
-                        <h3 className="text-lg font-semibold capitalize mb-2">{feature}</h3>
-                        <div className="pl-4">
-                          {Array.isArray(results) ? (
-                            <ul className="list-disc pl-4">
-                              {results.map((result, index) => (
-                                <li key={index}>{result}</li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <p>{String(results)}</p>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </Card>
-                </div>
+                <AnalysisResults
+                  results={analysisResults}
+                  onDownload={handleDownload}
+                />
               )}
             </div>
           </Card>
