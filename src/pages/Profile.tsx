@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -48,7 +47,7 @@ const Profile = () => {
         >
           <h1 className="text-3xl font-bold text-primary mb-8">Profile Settings</h1>
           
-          <Card className="max-w-2xl mx-auto p-6">
+          <Card className="max-w-2xl mx-auto p-6 dark:bg-[#1A1F2C] dark:border-white/10">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="flex flex-col items-center mb-6">
                 <div className="relative w-32 h-32 mb-4">
