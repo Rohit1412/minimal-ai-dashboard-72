@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,6 +9,7 @@ import Profile from "./pages/Profile";
 import VideoAnalysis from "./pages/VideoAnalysis";
 import ImageAnalysis from "./pages/ImageAnalysis";
 import NotFound from "./pages/NotFound";
+import TextAnalysis from "./pages/TextAnalysis";
 
 const queryClient = new QueryClient();
 
@@ -26,7 +26,7 @@ const App = () => (
               <Route path="/translate" element={<Index />} />
               <Route path="/analyse-video" element={<VideoAnalysis />} />
               <Route path="/analyse-audio" element={<Index />} />
-              <Route path="/analyse-text" element={<Index />} />
+              <Route path="/analyse-text" element={<TextAnalysis />} />
               <Route path="/analyse-image" element={<ImageAnalysis />} />
               <Route path="/history" element={<Index />} />
               <Route path="/profile" element={<Profile />} />
