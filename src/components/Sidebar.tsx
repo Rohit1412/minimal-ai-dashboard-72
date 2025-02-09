@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -41,7 +42,7 @@ const Sidebar = () => {
         <motion.button
           layout
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className={`fixed left-4 top-[26px] z-50 p-2 rounded-lg transition-colors flex items-center justify-center w-8 h-8 ${
+          className={`fixed right-4 top-[26px] z-50 p-2 rounded-lg transition-colors flex items-center justify-center w-8 h-8 ${
             theme === 'dark' 
               ? 'hover:bg-gray-800 text-gray-400 hover:text-white' 
               : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
