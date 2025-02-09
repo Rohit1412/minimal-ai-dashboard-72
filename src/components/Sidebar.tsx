@@ -30,24 +30,30 @@ const Sidebar = () => {
     <div className="fixed left-5 top-5 z-[100]">
       <motion.div
         initial={false}
-        animate={{ width: isCollapsed ? "80px" : "240px" }}
+        animate={{ 
+          width: isCollapsed ? "80px" : "240px",
+        }}
+        transition={{
+          duration: 0.3,
+          ease: "easeInOut"
+        }}
         className="h-[calc(100vh-40px)] bg-gray-900 border border-gray-800 flex flex-col rounded-xl shadow-xl"
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-800">
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" initial={false}>
             {!isCollapsed && (
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
                 className="flex items-center space-x-2"
               >
                 <span className="text-xl font-semibold text-white">AI</span>
                 <motion.span
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
                   className="text-xl font-semibold text-white"
                 >
                   Analysis
@@ -55,12 +61,13 @@ const Sidebar = () => {
               </motion.div>
             )}
           </AnimatePresence>
-          <button
+          <motion.button
+            layout
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-2 hover:bg-gray-800 rounded-lg transition-colors text-gray-400 hover:text-white"
+            className="p-2 hover:bg-gray-800 rounded-lg transition-colors text-gray-400 hover:text-white flex items-center justify-center w-8 h-8"
           >
             {isCollapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}
-          </button>
+          </motion.button>
         </div>
 
         <nav className="flex-1 p-4">
@@ -72,7 +79,7 @@ const Sidebar = () => {
                   className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-colors text-gray-400 hover:text-white group"
                 >
                   <item.icon size={20} className="group-hover:text-purple-400" />
-                  <AnimatePresence mode="wait">
+                  <AnimatePresence mode="wait" initial={false}>
                     {!isCollapsed && (
                       <motion.span
                         initial={{ opacity: 0, x: -10 }}
