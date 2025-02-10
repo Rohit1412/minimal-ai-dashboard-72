@@ -79,12 +79,12 @@ const History = () => {
   };
 
   return (
-    <div className="mx-[20vw] py-8 space-y-6 animate-fade-in">
-      <div className="flex items-center space-x-4">
+    <div className="flex flex-col items-center mx-[20vw] py-8 space-y-6 animate-fade-in">
+      <div className="flex items-center justify-center w-full space-x-4">
         <h1 className="text-3xl font-bold dark:text-white">History</h1>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row gap-4 mb-6 w-full">
         <div className="relative flex-grow">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input
@@ -112,7 +112,7 @@ const History = () => {
         </DropdownMenu>
       </div>
 
-      <div className="rounded-md border dark:border-white/10">
+      <div className="rounded-md border dark:border-white/10 w-full">
         <Table>
           <TableHeader>
             <TableRow className="dark:border-white/10">
