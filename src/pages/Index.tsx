@@ -23,7 +23,7 @@ const Index = () => {
         </h1>
       </div>
       <Sidebar />
-      <main className={`min-h-screen ${isMobile ? 'w-full px-4' : 'w-[80vw] ml-auto mr-[10vw] px-8'} pt-[calc(80px+10vh)] pb-8`}>
+      <main className={`min-h-screen ${isMobile ? 'w-full px-4' : 'w-[80vw] ml-auto mr-[10vw] px-8'} pt-[calc(80px+5vh)] pb-8`}>
         <motion.header 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
