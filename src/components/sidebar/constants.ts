@@ -20,4 +20,3 @@ export const menuItems = [
   { icon: UserCircle2, label: "Profile", href: "/profile" },
   { icon: Settings, label: "Settings", href: "/settings" },
 ];
-

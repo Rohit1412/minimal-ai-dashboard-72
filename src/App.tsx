@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -65,6 +64,20 @@ const App = () => {
                         <div className="flex-1">
                           <PageHeader />
                           <VideoAnalysis />
+                        </div>
+                      </div>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/analyse-audio"
+                  element={
+                    <ProtectedRoute>
+                      <div className="flex">
+                        <Sidebar />
+                        <div className="flex-1">
+                          <PageHeader />
+                          <AudioAnalysis />
                         </div>
                       </div>
                     </ProtectedRoute>
