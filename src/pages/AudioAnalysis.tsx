@@ -56,6 +56,15 @@ const AudioAnalysis = () => {
       return;
     }
 
+    if (!audioFile && !audioUrl) {
+      toast({
+        title: "Input Required",
+        description: "Please provide an audio file or URL to analyze.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsAnalyzing(true);
     try {
       const formData = new FormData();
@@ -65,26 +74,27 @@ const AudioAnalysis = () => {
         formData.append("audioUrl", audioUrl);
       }
 
-      // TODO: Replace with actual API call
-      // Simulated API response for now
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      setResults({
-        transcript: "This is a sample transcript.",
-        confidence: 0.95,
-        wordTimestamps: [
-          { word: "This", startTime: "0.0s", endTime: "0.2s" },
-          { word: "is", startTime: "0.2s", endTime: "0.4s" },
-        ],
-        speakerDiarization: ["Speaker 1: Hello", "Speaker 2: Hi"],
-        languageDetection: "English",
+      formData.append("features", JSON.stringify(selectedFeatures));
+      formData.append("apiKey", apiKey);
+
+      const response = await fetch("YOUR_BACKEND_URL/analyze-audio", {
+        method: "POST",
+        body: formData,
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to analyze audio");
+      }
+
+      const data = await response.json();
+      setResults(data);
 
       toast({
         title: "Analysis Complete",
         description: "Audio analysis completed successfully.",
       });
     } catch (error) {
+      console.error("Analysis error:", error);
       toast({
         title: "Analysis Failed",
         description: "Failed to analyze audio. Please try again.",
@@ -108,6 +118,15 @@ const AudioAnalysis = () => {
   };
 
   const handleDownload = () => {
+    if (!Object.keys(results).length) {
+      toast({
+        title: "No Results",
+        description: "There are no results to download.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const resultsString = JSON.stringify(results, null, 2);
     const blob = new Blob([resultsString], { type: "application/json" });
     const url = URL.createObjectURL(blob);
