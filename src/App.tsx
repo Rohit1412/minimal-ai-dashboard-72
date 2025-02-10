@@ -13,6 +13,7 @@ import TextAnalysis from "./pages/TextAnalysis";
 import Settings from "./pages/Settings";
 import History from "./pages/History";
 import Login from "./pages/Login";
+import AudioAnalysis from "./pages/AudioAnalysis";
 import PageHeader from "./components/PageHeader";
 import Sidebar from "./components/Sidebar";
 import ProtectedRoute from "./components/ProtectedRoute";
