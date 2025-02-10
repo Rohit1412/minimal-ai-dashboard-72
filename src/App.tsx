@@ -12,9 +12,19 @@ import ImageAnalysis from "./pages/ImageAnalysis";
 import NotFound from "./pages/NotFound";
 import TextAnalysis from "./pages/TextAnalysis";
 import Settings from "./pages/Settings";
+import History from "./pages/History";
 import PageHeader from "./components/PageHeader";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      cacheTime: 1000 * 60 * 30, // 30 minutes
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -31,7 +41,7 @@ const App = () => (
               <Route path="/analyse-audio" element={<Index />} />
               <Route path="/analyse-text" element={<TextAnalysis />} />
               <Route path="/analyse-image" element={<ImageAnalysis />} />
-              <Route path="/history" element={<Index />} />
+              <Route path="/history" element={<History />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
