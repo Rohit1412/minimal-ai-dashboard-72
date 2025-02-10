@@ -1,10 +1,10 @@
-
 import { Card } from "@/components/ui/card";
 import Sidebar from "@/components/Sidebar";
 import { BarChart3, BrainCircuit, Sparkles, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { APP_TITLE } from "@/constants/text";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, AreaChart, Area } from 'recharts';
 
 const Index = () => {
   const userData = {
@@ -14,10 +14,34 @@ const Index = () => {
     accuracy: 94.3
   };
 
+  const apiUsageData = [
+    { name: 'Mon', calls: 150 },
+    { name: 'Tue', calls: 230 },
+    { name: 'Wed', calls: 180 },
+    { name: 'Thu', calls: 290 },
+    { name: 'Fri', calls: 200 },
+    { name: 'Sat', calls: 120 },
+    { name: 'Sun', calls: 160 },
+  ];
+
+  const fileTypeData = [
+    { name: 'Audio', files: 45 },
+    { name: 'Video', files: 30 },
+    { name: 'Text', files: 60 },
+    { name: 'Image', files: 40 },
+  ];
+
+  const accuracyTrendData = [
+    { name: 'Week 1', accuracy: 92 },
+    { name: 'Week 2', accuracy: 93.5 },
+    { name: 'Week 3', accuracy: 94.1 },
+    { name: 'Week 4', accuracy: 94.3 },
+  ];
+
   const isMobile = useIsMobile();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background font-archivo">
       <div className="h-[80px] w-full bg-background fixed top-0 z-40 border-none flex items-center justify-center">
         <h1 className={`font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent ${isMobile ? 'text-lg' : 'text-2xl'}`}>
           {APP_TITLE}
@@ -87,10 +111,72 @@ const Index = () => {
             </div>
           </Card>
         </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card className="col-span-1 md:col-span-2 lg:col-span-3 p-6 backdrop-blur-sm bg-background/80 border-border shadow-lg hover:shadow-xl transition-all duration-300">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-foreground dark:text-white`}>API Usage Trend</h3>
+                  <BarChart3 className="w-5 h-5 text-muted-foreground dark:text-white/70" />
+                </div>
+                <div className="h-[200px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={apiUsageData}>
+                      <XAxis dataKey="name" stroke="#888888" fontSize={12} />
+                      <YAxis stroke="#888888" fontSize={12} />
+                      <Tooltip />
+                      <Bar dataKey="calls" fill="#8B5CF6" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-foreground dark:text-white`}>File Type Distribution</h3>
+                  <BarChart3 className="w-5 h-5 text-muted-foreground dark:text-white/70" />
+                </div>
+                <div className="h-[200px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={fileTypeData}>
+                      <XAxis dataKey="name" stroke="#888888" fontSize={12} />
+                      <YAxis stroke="#888888" fontSize={12} />
+                      <Tooltip />
+                      <Bar dataKey="files" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <div className="lg:col-span-2">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-foreground dark:text-white`}>Accuracy Trend</h3>
+                  <TrendingUp className="w-5 h-5 text-muted-foreground dark:text-white/70" />
+                </div>
+                <div className="h-[200px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={accuracyTrendData}>
+                      <XAxis dataKey="name" stroke="#888888" fontSize={12} />
+                      <YAxis stroke="#888888" fontSize={12} />
+                      <Tooltip />
+                      <Area 
+                        type="monotone" 
+                        dataKey="accuracy" 
+                        stroke="#10B981" 
+                        fill="#10B981" 
+                        fillOpacity={0.2} 
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
       </main>
     </div>
   );
 };
 
 export default Index;
-
