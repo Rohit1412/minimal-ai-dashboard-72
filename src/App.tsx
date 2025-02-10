@@ -13,8 +13,10 @@ import NotFound from "./pages/NotFound";
 import TextAnalysis from "./pages/TextAnalysis";
 import Settings from "./pages/Settings";
 import History from "./pages/History";
+import Login from "./pages/Login";
 import PageHeader from "./components/PageHeader";
 import Sidebar from "./components/Sidebar";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,36 +29,125 @@ const queryClient = new QueryClient({
   },
 });
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <TooltipProvider>
-        <div className="min-h-screen bg-background transition-colors duration-300">
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <div className="flex">
-              <Sidebar />
-              <div className="flex-1">
-                <PageHeader />
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/analyse-video" element={<VideoAnalysis />} />
-                  <Route path="/analyse-audio" element={<Index />} />
-                  <Route path="/analyse-text" element={<TextAnalysis />} />
-                  <Route path="/analyse-image" element={<ImageAnalysis />} />
-                  <Route path="/history" element={<History />} />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </div>
-            </div>
-          </BrowserRouter>
-        </div>
-      </TooltipProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <TooltipProvider>
+          <div className="min-h-screen bg-background transition-colors duration-300">
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                
+                {/* Protected Routes */}
+                <Route
+                  path="/"
+                  element={
+                    <ProtectedRoute>
+                      <div className="flex">
+                        <Sidebar />
+                        <div className="flex-1">
+                          <PageHeader />
+                          <Index />
+                        </div>
+                      </div>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/analyse-video"
+                  element={
+                    <ProtectedRoute>
+                      <div className="flex">
+                        <Sidebar />
+                        <div className="flex-1">
+                          <PageHeader />
+                          <VideoAnalysis />
+                        </div>
+                      </div>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/analyse-text"
+                  element={
+                    <ProtectedRoute>
+                      <div className="flex">
+                        <Sidebar />
+                        <div className="flex-1">
+                          <PageHeader />
+                          <TextAnalysis />
+                        </div>
+                      </div>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/analyse-image"
+                  element={
+                    <ProtectedRoute>
+                      <div className="flex">
+                        <Sidebar />
+                        <div className="flex-1">
+                          <PageHeader />
+                          <ImageAnalysis />
+                        </div>
+                      </div>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/history"
+                  element={
+                    <ProtectedRoute>
+                      <div className="flex">
+                        <Sidebar />
+                        <div className="flex-1">
+                          <PageHeader />
+                          <History />
+                        </div>
+                      </div>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <div className="flex">
+                        <Sidebar />
+                        <div className="flex-1">
+                          <PageHeader />
+                          <Profile />
+                        </div>
+                      </div>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/settings"
+                  element={
+                    <ProtectedRoute>
+                      <div className="flex">
+                        <Sidebar />
+                        <div className="flex-1">
+                          <PageHeader />
+                          <Settings />
+                        </div>
+                      </div>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </div>
+        </TooltipProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
