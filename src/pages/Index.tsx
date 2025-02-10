@@ -18,12 +18,43 @@ interface UsageData {
   accuracyTrend: { name: string; accuracy: number; }[];
 }
 
+// Mock data for development
+const mockUsageData: UsageData = {
+  name: "Developer",
+  apiCalls: 1250,
+  analysedData: 847,
+  accuracy: 95.7,
+  apiUsage: [
+    { name: "Jan", calls: 400 },
+    { name: "Feb", calls: 300 },
+    { name: "Mar", calls: 550 },
+    { name: "Apr", calls: 450 },
+    { name: "May", calls: 650 },
+  ],
+  fileTypes: [
+    { name: "PDF", files: 145 },
+    { name: "DOC", files: 85 },
+    { name: "TXT", files: 215 },
+    { name: "JSON", files: 122 },
+  ],
+  accuracyTrend: [
+    { name: "Week 1", accuracy: 91 },
+    { name: "Week 2", accuracy: 93 },
+    { name: "Week 3", accuracy: 94.5 },
+    { name: "Week 4", accuracy: 95.7 },
+  ]
+};
+
 const fetchUsageData = async (): Promise<UsageData> => {
-  const response = await fetch('https://api.yourdomain.com/usage-data');
-  if (!response.ok) {
-    throw new Error('Failed to fetch usage data');
-  }
-  return response.json();
+  // For development, return mock data
+  return Promise.resolve(mockUsageData);
+  
+  // TODO: Uncomment and modify when backend is ready
+  // const response = await fetch('YOUR_ACTUAL_API_ENDPOINT');
+  // if (!response.ok) {
+  //   throw new Error('Failed to fetch usage data');
+  // }
+  // return response.json();
 };
 
 const Index = () => {
@@ -177,3 +208,4 @@ const Index = () => {
 };
 
 export default Index;
+
