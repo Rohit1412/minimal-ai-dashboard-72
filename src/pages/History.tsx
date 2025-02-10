@@ -79,8 +79,10 @@ const History = () => {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4 space-y-6 animate-fade-in">
-      <h1 className="text-3xl font-bold mb-6 dark:text-white">Analysis History</h1>
+    <div className="mx-[20vw] py-8 space-y-6 animate-fade-in">
+      <div className="flex items-center space-x-4">
+        <h1 className="text-3xl font-bold dark:text-white">History</h1>
+      </div>
 
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="relative flex-grow">
