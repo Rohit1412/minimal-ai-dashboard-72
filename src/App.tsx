@@ -14,6 +14,7 @@ import TextAnalysis from "./pages/TextAnalysis";
 import Settings from "./pages/Settings";
 import History from "./pages/History";
 import PageHeader from "./components/PageHeader";
+import Sidebar from "./components/Sidebar";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,18 +35,23 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <PageHeader />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/analyse-video" element={<VideoAnalysis />} />
-              <Route path="/analyse-audio" element={<Index />} />
-              <Route path="/analyse-text" element={<TextAnalysis />} />
-              <Route path="/analyse-image" element={<ImageAnalysis />} />
-              <Route path="/history" element={<History />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <div className="flex">
+              <Sidebar />
+              <div className="flex-1">
+                <PageHeader />
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/analyse-video" element={<VideoAnalysis />} />
+                  <Route path="/analyse-audio" element={<Index />} />
+                  <Route path="/analyse-text" element={<TextAnalysis />} />
+                  <Route path="/analyse-image" element={<ImageAnalysis />} />
+                  <Route path="/history" element={<History />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </div>
+            </div>
           </BrowserRouter>
         </div>
       </TooltipProvider>
