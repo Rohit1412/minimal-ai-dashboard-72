@@ -1,10 +1,8 @@
-
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   ChevronLeft, 
   Menu,
-  Languages,
   Video,
   AudioLines,
   FileText,
@@ -26,7 +24,6 @@ const Sidebar = () => {
 
   const menuItems = [
     { icon: Home, label: "Home", href: "/" },
-    { icon: Languages, label: "Translate", href: "/translate" },
     { icon: Video, label: "Analyse Video", href: "/analyse-video" },
     { icon: AudioLines, label: "Analyse Audio", href: "/analyse-audio" },
     { icon: FileText, label: "Analyse Text", href: "/analyse-text" },
