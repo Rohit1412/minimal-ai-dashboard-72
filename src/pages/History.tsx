@@ -19,8 +19,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import jsPDF from "jspdf";
 
-// Mock data structure - replace with actual data source
 interface HistoryItem {
   id: string;
   type: "text" | "image" | "video";
@@ -56,21 +56,55 @@ const History = () => {
   });
 
   const handleDownload = (item: HistoryItem) => {
-    const dataStr = JSON.stringify(item.results, null, 2);
-    const dataBlob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `analysis-${item.id}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    try {
+      const pdf = new jsPDF();
+      const margin = 20;
+      let yPosition = margin;
 
-    toast({
-      title: "Success",
-      description: "Analysis results downloaded successfully",
-    });
+      // Add title
+      pdf.setFontSize(16);
+      pdf.text(`Analysis Report - ${item.type.toUpperCase()}`, margin, yPosition);
+      yPosition += 10;
+
+      // Add metadata
+      pdf.setFontSize(12);
+      pdf.text(`Date: ${new Date(item.timestamp).toLocaleDateString()}`, margin, yPosition);
+      yPosition += 10;
+      pdf.text(`Content: ${item.content}`, margin, yPosition);
+      yPosition += 10;
+
+      // Add results
+      pdf.text("Analysis Results:", margin, yPosition);
+      yPosition += 10;
+
+      Object.entries(item.results).forEach(([key, value]) => {
+        const text = Array.isArray(value)
+          ? `${key}: ${value.join(", ")}`
+          : `${key}: ${value}`;
+        
+        // Check if text will overflow page
+        if (yPosition > pdf.internal.pageSize.height - margin) {
+          pdf.addPage();
+          yPosition = margin;
+        }
+        
+        pdf.text(text, margin, yPosition);
+        yPosition += 7;
+      });
+
+      pdf.save(`analysis-${item.id}.pdf`);
+
+      toast({
+        title: "Success",
+        description: "Analysis results downloaded as PDF",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to generate PDF",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleViewDetails = (item: HistoryItem) => {
@@ -79,7 +113,7 @@ const History = () => {
   };
 
   return (
-    <div className="flex flex-col items-center mx-[20vw] py-8 space-y-6 animate-fade-in">
+    <div className="flex flex-col items-center justify-center mx-[20vw] py-8 space-y-6 animate-fade-in">
       <div className="flex items-center justify-center w-full space-x-4">
         <h1 className="text-3xl font-bold dark:text-white">History</h1>
       </div>
