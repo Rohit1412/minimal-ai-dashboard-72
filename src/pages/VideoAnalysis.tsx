@@ -8,6 +8,8 @@ import VideoInput from "@/components/video/VideoInput";
 import FeatureSelection from "@/components/video/FeatureSelection";
 import AnalysisResults from "@/components/video/AnalysisResults";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useGoogleApi } from "@/hooks/use-google-api";
+import { useNavigate } from "react-router-dom";
 
 interface AnalysisResults {
   labels?: string[];
@@ -30,8 +32,11 @@ const VideoAnalysis = () => {
     explicit: false,
     faces: false
   });
+  
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  const { apiKey, isConfigured } = useGoogleApi();
+  const navigate = useNavigate();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -62,6 +67,16 @@ const VideoAnalysis = () => {
   };
 
   const handleAnalyze = async () => {
+    if (!isConfigured) {
+      toast({
+        title: "API Key Required",
+        description: "Please configure your Google API key in settings first.",
+        variant: "destructive",
+      });
+      navigate('/settings');
+      return;
+    }
+
     if (!videoUrl && !videoFile) {
       toast({
         title: "Error",
@@ -72,7 +87,7 @@ const VideoAnalysis = () => {
     }
 
     setIsAnalyzing(true);
-    // API integration will be added here
+    // API integration will be added here using apiKey
     await new Promise(resolve => setTimeout(resolve, 2000)); // Simulated delay
     
     // Simulated results based on selected features

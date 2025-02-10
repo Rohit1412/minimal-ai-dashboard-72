@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import Sidebar from "@/components/Sidebar";
@@ -9,6 +8,8 @@ import ImageInput from "@/components/image/ImageInput";
 import FeatureSelection from "@/components/image/FeatureSelection";
 import AnalysisResults from "@/components/image/AnalysisResults";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useGoogleApi } from "@/hooks/use-google-api";
+import { useNavigate } from "react-router-dom";
 
 interface AnalysisResults {
   labels?: string[];
@@ -33,8 +34,11 @@ const ImageAnalysis = () => {
     faces: false,
     landmarks: false
   });
+  
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  const { apiKey, isConfigured } = useGoogleApi();
+  const navigate = useNavigate();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -66,6 +70,16 @@ const ImageAnalysis = () => {
   };
 
   const handleAnalyze = async () => {
+    if (!isConfigured) {
+      toast({
+        title: "API Key Required",
+        description: "Please configure your Google API key in settings first.",
+        variant: "destructive",
+      });
+      navigate('/settings');
+      return;
+    }
+
     if (!imageUrl && !imageFile) {
       toast({
         title: "Error",
@@ -76,7 +90,7 @@ const ImageAnalysis = () => {
     }
 
     setIsAnalyzing(true);
-    // API integration will be added here
+    // API integration will be added here using apiKey
     await new Promise(resolve => setTimeout(resolve, 2000)); // Simulated delay
     
     // Simulated results based on selected features

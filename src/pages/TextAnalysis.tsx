@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import Sidebar from "@/components/Sidebar";
@@ -9,6 +8,8 @@ import TextInput from "@/components/text/TextInput";
 import FeatureSelection from "@/components/text/FeatureSelection";
 import AnalysisResults from "@/components/text/AnalysisResults";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useGoogleApi } from "@/hooks/use-google-api";
+import { useNavigate } from "react-router-dom";
 
 interface AnalysisResults {
   entities?: string[];
@@ -31,40 +32,23 @@ const TextAnalysis = () => {
     categories: false,
     language: false
   });
+  
   const { toast } = useToast();
   const isMobile = useIsMobile();
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.type === 'text/plain' || file.type === 'application/msword' || 
-          file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-        setTextFile(file);
-        const content = await file.text();
-        setText(content);
-      } else {
-        toast({
-          title: "Error",
-          description: "Please upload a valid text file (.txt, .doc, .docx)",
-          variant: "destructive",
-        });
-      }
-    }
-  };
-
-  const runAllAnalysis = () => {
-    setIsRunningAll(true);
-    setSelectedFeatures({
-      entities: true,
-      sentiment: true,
-      syntax: true,
-      categories: true,
-      language: true
-    });
-    handleAnalyze();
-  };
+  const { apiKey, isConfigured } = useGoogleApi();
+  const navigate = useNavigate();
 
   const handleAnalyze = async () => {
+    if (!isConfigured) {
+      toast({
+        title: "API Key Required",
+        description: "Please configure your Google API key in settings first.",
+        variant: "destructive",
+      });
+      navigate('/settings');
+      return;
+    }
+
     if (!text && !textFile) {
       toast({
         title: "Error",
@@ -75,7 +59,7 @@ const TextAnalysis = () => {
     }
 
     setIsAnalyzing(true);
-    // API integration will be added here
+    // API integration will be added here using apiKey
     await new Promise(resolve => setTimeout(resolve, 2000)); // Simulated delay
     
     // Simulated results based on selected features
@@ -94,6 +78,36 @@ const TextAnalysis = () => {
       title: "Analysis Complete",
       description: "Your text has been analyzed successfully!",
     });
+  };
+
+  const runAllAnalysis = () => {
+    setIsRunningAll(true);
+    setSelectedFeatures({
+      entities: true,
+      sentiment: true,
+      syntax: true,
+      categories: true,
+      language: true
+    });
+    handleAnalyze();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.type === 'text/plain' || file.type === 'application/msword' || 
+          file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+        setTextFile(file);
+        const content = await file.text();
+        setText(content);
+      } else {
+        toast({
+          title: "Error",
+          description: "Please upload a valid text file (.txt, .doc, .docx)",
+          variant: "destructive",
+        });
+      }
+    }
   };
 
   const handleDownload = () => {
