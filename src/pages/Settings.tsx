@@ -94,8 +94,8 @@ const Settings = () => {
           className="max-w-4xl mx-auto"
         >
           <div className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground">Application Settings</h2>
-            <p className="text-muted-foreground mt-2">
+            <h2 className="text-2xl font-semibold text-foreground dark:text-white">Application Settings</h2>
+            <p className="text-muted-foreground dark:text-gray-300 mt-2">
               Configure your application settings and preferences here.
             </p>
           </div>
@@ -104,58 +104,58 @@ const Settings = () => {
             <form onSubmit={handleSaveSettings} className="space-y-6">
               {/* API Settings */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">API Configuration</h3>
+                <h3 className="text-lg font-medium dark:text-white">API Configuration</h3>
                 <div>
-                  <Label htmlFor="googleApiKey">Google API Key</Label>
+                  <Label htmlFor="googleApiKey" className="dark:text-gray-200">Google API Key</Label>
                   <Input
                     id="googleApiKey"
                     type="password"
                     value={googleApiKey}
                     onChange={(e) => setGoogleApiKey(e.target.value)}
                     placeholder="Enter your Google API Key"
-                    className="mt-1"
+                    className="mt-1 dark:text-white dark:bg-[#2A2F3C] dark:border-white/10"
                   />
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Visit the <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Google Cloud Console</a> to get your API key.
+                  <p className="text-sm text-muted-foreground dark:text-gray-400 mt-1">
+                    Visit the <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline dark:text-blue-400">Google Cloud Console</a> to get your API key.
                   </p>
                 </div>
 
                 <div>
-                  <Label htmlFor="apiCallLimit">API Call Limit (per day)</Label>
+                  <Label htmlFor="apiCallLimit" className="dark:text-gray-200">API Call Limit (per day)</Label>
                   <Input
                     id="apiCallLimit"
                     type="number"
                     value={apiCallLimit}
                     onChange={(e) => setApiCallLimit(e.target.value)}
                     placeholder="Enter API call limit"
-                    className="mt-1"
+                    className="mt-1 dark:text-white dark:bg-[#2A2F3C] dark:border-white/10"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="dataRetention">Data Retention (days)</Label>
+                  <Label htmlFor="dataRetention" className="dark:text-gray-200">Data Retention (days)</Label>
                   <Input
                     id="dataRetention"
                     type="number"
                     value={dataRetention}
                     onChange={(e) => setDataRetention(e.target.value)}
                     placeholder="Enter data retention period in days"
-                    className="mt-1"
+                    className="mt-1 dark:text-white dark:bg-[#2A2F3C] dark:border-white/10"
                   />
                 </div>
               </div>
 
               {/* Appearance */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Appearance</h3>
+                <h3 className="text-lg font-medium dark:text-white">Appearance</h3>
                 
                 <div>
-                  <Label htmlFor="theme">Theme</Label>
+                  <Label htmlFor="theme" className="dark:text-gray-200">Theme</Label>
                   <select
                     id="theme"
                     value={theme}
                     onChange={(e) => setTheme(e.target.value)}
-                    className="w-full mt-1 px-3 py-2 bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full mt-1 px-3 py-2 bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:text-white dark:bg-[#2A2F3C] dark:border-white/10"
                   >
                     <option value="system">System</option>
                     <option value="light">Light</option>
@@ -164,12 +164,12 @@ const Settings = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="fontSize">Font Size</Label>
+                  <Label htmlFor="fontSize" className="dark:text-gray-200">Font Size</Label>
                   <select
                     id="fontSize"
                     value={fontSize}
                     onChange={(e) => setFontSize(e.target.value)}
-                    className="w-full mt-1 px-3 py-2 bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full mt-1 px-3 py-2 bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:text-white dark:bg-[#2A2F3C] dark:border-white/10"
                   >
                     <option value="small">Small</option>
                     <option value="medium">Medium</option>
@@ -180,13 +180,13 @@ const Settings = () => {
 
               {/* Notifications */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Notifications</h3>
+                <h3 className="text-lg font-medium dark:text-white">Notifications</h3>
                 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label htmlFor="emailNotif">Email Notifications</Label>
-                      <p className="text-sm text-muted-foreground">Receive updates via email</p>
+                      <Label htmlFor="emailNotif" className="dark:text-gray-200">Email Notifications</Label>
+                      <p className="text-sm text-muted-foreground dark:text-gray-400">Receive updates via email</p>
                     </div>
                     <Switch
                       id="emailNotif"
@@ -197,8 +197,8 @@ const Settings = () => {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label htmlFor="desktopNotif">Desktop Notifications</Label>
-                      <p className="text-sm text-muted-foreground">Show desktop alerts</p>
+                      <Label htmlFor="desktopNotif" className="dark:text-gray-200">Desktop Notifications</Label>
+                      <p className="text-sm text-muted-foreground dark:text-gray-400">Show desktop alerts</p>
                     </div>
                     <Switch
                       id="desktopNotif"
@@ -209,8 +209,8 @@ const Settings = () => {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label htmlFor="updateNotif">Update Notifications</Label>
-                      <p className="text-sm text-muted-foreground">Get notified about new features</p>
+                      <Label htmlFor="updateNotif" className="dark:text-gray-200">Update Notifications</Label>
+                      <p className="text-sm text-muted-foreground dark:text-gray-400">Get notified about new features</p>
                     </div>
                     <Switch
                       id="updateNotif"
@@ -221,8 +221,8 @@ const Settings = () => {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label htmlFor="securityNotif">Security Alerts</Label>
-                      <p className="text-sm text-muted-foreground">Important security notifications</p>
+                      <Label htmlFor="securityNotif" className="dark:text-gray-200">Security Alerts</Label>
+                      <p className="text-sm text-muted-foreground dark:text-gray-400">Important security notifications</p>
                     </div>
                     <Switch
                       id="securityNotif"
@@ -235,12 +235,12 @@ const Settings = () => {
 
               {/* Preferences */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Preferences</h3>
+                <h3 className="text-lg font-medium dark:text-white">Preferences</h3>
                 
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="autoSave">Auto-save</Label>
-                    <p className="text-sm text-muted-foreground">Automatically save changes</p>
+                    <Label htmlFor="autoSave" className="dark:text-gray-200">Auto-save</Label>
+                    <p className="text-sm text-muted-foreground dark:text-gray-400">Automatically save changes</p>
                   </div>
                   <Switch
                     id="autoSave"
@@ -250,12 +250,12 @@ const Settings = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="language">Language</Label>
+                  <Label htmlFor="language" className="dark:text-gray-200">Language</Label>
                   <select
                     id="language"
                     value={language}
                     onChange={(e) => setLanguage(e.target.value)}
-                    className="w-full mt-1 px-3 py-2 bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full mt-1 px-3 py-2 bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:text-white dark:bg-[#2A2F3C] dark:border-white/10"
                   >
                     <option value="english">English</option>
                     <option value="spanish">Spanish</option>
@@ -279,3 +279,4 @@ const Settings = () => {
 };
 
 export default Settings;
+
