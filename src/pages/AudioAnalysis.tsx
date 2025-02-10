@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { AudioLines } from "lucide-react";
@@ -24,6 +24,23 @@ const AudioAnalysis = () => {
   const isMobile = useIsMobile();
   const { apiKey, isConfigured } = useGoogleApi();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const loadFont = async () => {
+      const font = new FontFace(
+        'Archivo',
+        'url(https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap)'
+      );
+      try {
+        await font.load();
+        document.fonts.add(font);
+        console.log('Archivo font loaded successfully');
+      } catch (error) {
+        console.error('Error loading Archivo font:', error);
+      }
+    };
+    loadFont();
+  }, []);
 
   const [audioUrl, setAudioUrl] = useState("");
   const [audioFile, setAudioFile] = useState<File | null>(null);
@@ -77,7 +94,7 @@ const AudioAnalysis = () => {
       formData.append("features", JSON.stringify(selectedFeatures));
       formData.append("apiKey", apiKey);
 
-      const response = await fetch("YOUR_BACKEND_URL/analyze-audio", {
+      const response = await fetch("https://api.yourdomain.com/analyze-audio", {
         method: "POST",
         body: formData,
       });
@@ -140,7 +157,7 @@ const AudioAnalysis = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background font-archivo">
       <main className={`min-h-screen ${isMobile ? 'w-full px-4' : 'w-[80vw] ml-auto mr-[10vw] px-8'} pt-20 pb-8`}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -186,3 +203,4 @@ const AudioAnalysis = () => {
 };
 
 export default AudioAnalysis;
+
