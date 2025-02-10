@@ -12,6 +12,7 @@ import ImageAnalysis from "./pages/ImageAnalysis";
 import NotFound from "./pages/NotFound";
 import TextAnalysis from "./pages/TextAnalysis";
 import Settings from "./pages/Settings";
+import PageHeader from "./components/PageHeader";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <PageHeader />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/analyse-video" element={<VideoAnalysis />} />
