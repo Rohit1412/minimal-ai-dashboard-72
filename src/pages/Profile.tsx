@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Sidebar from "@/components/Sidebar";
 import { motion } from "framer-motion";
 import { UserCircle2, Upload } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Profile = () => {
   const [userDetails, setUserDetails] = useState({
@@ -143,4 +144,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
