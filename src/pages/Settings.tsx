@@ -12,7 +12,6 @@ import { NotificationsSection } from "@/components/settings/NotificationsSection
 import { PreferencesSection } from "@/components/settings/PreferencesSection";
 
 const Settings = () => {
-  const [googleApiKey, setGoogleApiKey] = useState("");
   const [emailNotifications, setEmailNotifications] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [language, setLanguage] = useState("english");
@@ -32,7 +31,6 @@ const Settings = () => {
 
   useEffect(() => {
     // Load saved settings from localStorage
-    const savedGoogleApiKey = localStorage.getItem("google_api_key");
     const savedEmailNotifications = localStorage.getItem("email_notifications") === "true";
     const savedDarkMode = localStorage.getItem("dark_mode") === "true";
     const savedLanguage = localStorage.getItem("language") || "english";
@@ -43,7 +41,6 @@ const Settings = () => {
     const savedDataRetention = localStorage.getItem("data_retention") || "30";
     const savedNotifications = JSON.parse(localStorage.getItem("notifications") || "{}");
 
-    setGoogleApiKey(savedGoogleApiKey || "");
     setEmailNotifications(savedEmailNotifications);
     setDarkMode(savedDarkMode);
     setLanguage(savedLanguage);
@@ -66,7 +63,6 @@ const Settings = () => {
     e.preventDefault();
     
     // Store settings in localStorage
-    localStorage.setItem("google_api_key", googleApiKey);
     localStorage.setItem("email_notifications", emailNotifications.toString());
     localStorage.setItem("dark_mode", darkMode.toString());
     localStorage.setItem("language", language);
@@ -104,10 +100,8 @@ const Settings = () => {
           <Card className="p-6 dark:bg-[#1A1F2C] dark:border-white/10">
             <form onSubmit={handleSaveSettings} className="space-y-6">
               <APIConfigSection
-                googleApiKey={googleApiKey}
                 apiCallLimit={apiCallLimit}
                 dataRetention={dataRetention}
-                onGoogleApiKeyChange={setGoogleApiKey}
                 onApiCallLimitChange={setApiCallLimit}
                 onDataRetentionChange={setDataRetention}
               />
