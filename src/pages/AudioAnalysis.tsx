@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AudioInput from "@/components/audio/AudioInput";
 import FeatureSelection from "@/components/audio/FeatureSelection";
@@ -18,6 +19,7 @@ interface AnalysisResults {
 
 const AudioAnalysis = () => {
   const isMobile = useIsMobile();
+  const { toast } = useToast();
 
   useEffect(() => {
     const loadFont = async () => {
@@ -121,3 +123,4 @@ const AudioAnalysis = () => {
 };
 
 export default AudioAnalysis;
+
