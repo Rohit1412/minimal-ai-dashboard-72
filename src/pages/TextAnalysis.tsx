@@ -42,7 +42,7 @@ const TextAnalysis = () => {
     if (!isConfigured) {
       toast({
         title: "API Key Required",
-        description: "Please configure your Google API key in settings first.",
+        description: "Please configure your Google Cloud API key in settings first.",
         variant: "destructive",
       });
       navigate('/settings');
@@ -59,25 +59,77 @@ const TextAnalysis = () => {
     }
 
     setIsAnalyzing(true);
-    // API integration will be added here using apiKey
-    await new Promise(resolve => setTimeout(resolve, 2000)); // Simulated delay
-    
-    // Simulated results based on selected features
-    const results: AnalysisResults = {};
-    if (selectedFeatures.entities) results.entities = ["Person: John", "Location: New York", "Organization: Google"];
-    if (selectedFeatures.sentiment) results.sentiment = "Score: 0.8 (Positive)";
-    if (selectedFeatures.syntax) results.syntax = ["Noun: book", "Verb: read", "Adjective: interesting"];
-    if (selectedFeatures.categories) results.categories = ["/Internet & Telecom", "/Technology"];
-    if (selectedFeatures.language) results.language = "English (en)";
+    try {
+      const requestBody = {
+        document: {
+          type: 'PLAIN_TEXT',
+          content: text
+        },
+        features: {
+          extractSyntax: selectedFeatures.syntax,
+          extractEntities: selectedFeatures.entities,
+          extractDocumentSentiment: selectedFeatures.sentiment,
+          classifyText: selectedFeatures.categories,
+        },
+      };
 
-    setAnalysisResults(results);
-    setIsAnalyzing(false);
-    setIsRunningAll(false);
-    
-    toast({
-      title: "Analysis Complete",
-      description: "Your text has been analyzed successfully!",
-    });
+      const response = await fetch(
+        `https://language.googleapis.com/v1/documents:annotateText?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody)
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to analyze text');
+      }
+
+      const data = await response.json();
+      const results: AnalysisResults = {};
+
+      if (selectedFeatures.entities) {
+        results.entities = data.entities?.map((entity: any) => 
+          `${entity.name} (${entity.type}, ${Math.round(entity.salience * 100)}% relevance)`
+        ) || [];
+      }
+      if (selectedFeatures.sentiment) {
+        const sentiment = data.documentSentiment;
+        results.sentiment = `Score: ${sentiment.score} (${sentiment.score > 0 ? 'Positive' : sentiment.score < 0 ? 'Negative' : 'Neutral'}), Magnitude: ${sentiment.magnitude}`;
+      }
+      if (selectedFeatures.syntax) {
+        results.syntax = data.tokens?.map((token: any) => 
+          `${token.text.content} (${token.partOfSpeech.tag})`
+        ) || [];
+      }
+      if (selectedFeatures.categories) {
+        results.categories = data.categories?.map((category: any) => 
+          `${category.name} (${Math.round(category.confidence * 100)}%)`
+        ) || [];
+      }
+      if (selectedFeatures.language) {
+        results.language = data.language || 'Unknown';
+      }
+
+      setAnalysisResults(results);
+      toast({
+        title: "Analysis Complete",
+        description: "Your text has been analyzed successfully!",
+      });
+    } catch (error) {
+      console.error('Text analysis error:', error);
+      toast({
+        title: "Analysis Failed",
+        description: "Failed to analyze text. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAnalyzing(false);
+      setIsRunningAll(false);
+    }
   };
 
   const runAllAnalysis = () => {

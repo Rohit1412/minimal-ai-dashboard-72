@@ -73,7 +73,7 @@ const ImageAnalysis = () => {
     if (!isConfigured) {
       toast({
         title: "API Key Required",
-        description: "Please configure your Google API key in settings first.",
+        description: "Please configure your Google Cloud API key in settings first.",
         variant: "destructive",
       });
       navigate('/settings');
@@ -90,26 +90,94 @@ const ImageAnalysis = () => {
     }
 
     setIsAnalyzing(true);
-    // API integration will be added here using apiKey
-    await new Promise(resolve => setTimeout(resolve, 2000)); // Simulated delay
-    
-    // Simulated results based on selected features
-    const results: AnalysisResults = {};
-    if (selectedFeatures.labels) results.labels = ["person", "indoor", "clothing"];
-    if (selectedFeatures.objects) results.objects = ["chair", "table", "lamp"];
-    if (selectedFeatures.texts) results.texts = ["Sample", "Text"];
-    if (selectedFeatures.explicit) results.explicit = "UNLIKELY";
-    if (selectedFeatures.faces) results.faces = ["joy: 0.9", "confidence: 0.95"];
-    if (selectedFeatures.landmarks) results.landmarks = ["Eiffel Tower", "Big Ben"];
+    try {
+      let imageContent = "";
+      if (imageFile) {
+        const reader = new FileReader();
+        imageContent = await new Promise((resolve) => {
+          reader.onload = () => resolve(reader.result as string);
+          reader.readAsDataURL(imageFile);
+        });
+      }
 
-    setAnalysisResults(results);
-    setIsAnalyzing(false);
-    setIsRunningAll(false);
-    
-    toast({
-      title: "Analysis Complete",
-      description: "Your image has been analyzed successfully!",
-    });
+      const requestBody = {
+        requests: [{
+          image: {
+            content: imageContent.split(',')[1]
+          },
+          features: [
+            { type: 'LABEL_DETECTION' },
+            { type: 'OBJECT_LOCALIZATION' },
+            { type: 'TEXT_DETECTION' },
+            { type: 'SAFE_SEARCH_DETECTION' },
+            { type: 'FACE_DETECTION' },
+            { type: 'LANDMARK_DETECTION' }
+          ]
+        }]
+      };
+
+      const response = await fetch(
+        `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody)
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to analyze image');
+      }
+
+      const data = await response.json();
+      const results: AnalysisResults = {};
+      
+      if (selectedFeatures.labels) {
+        results.labels = data.responses[0].labelAnnotations?.map((label: any) => 
+          `${label.description} (${Math.round(label.score * 100)}%)`
+        ) || [];
+      }
+      if (selectedFeatures.objects) {
+        results.objects = data.responses[0].localizedObjectAnnotations?.map((obj: any) => 
+          `${obj.name} (${Math.round(obj.score * 100)}%)`
+        ) || [];
+      }
+      if (selectedFeatures.texts) {
+        results.texts = data.responses[0].textAnnotations?.map((text: any) => text.description) || [];
+      }
+      if (selectedFeatures.explicit) {
+        const safeSearch = data.responses[0].safeSearchAnnotation;
+        results.explicit = `Adult: ${safeSearch?.adult}, Violence: ${safeSearch?.violence}`;
+      }
+      if (selectedFeatures.faces) {
+        results.faces = data.responses[0].faceAnnotations?.map((face: any) => 
+          `Joy: ${face.joyLikelihood}, Confidence: ${Math.round(face.detectionConfidence * 100)}%`
+        ) || [];
+      }
+      if (selectedFeatures.landmarks) {
+        results.landmarks = data.responses[0].landmarkAnnotations?.map((landmark: any) => 
+          `${landmark.description} (${Math.round(landmark.score * 100)}%)`
+        ) || [];
+      }
+
+      setAnalysisResults(results);
+      toast({
+        title: "Analysis Complete",
+        description: "Your image has been analyzed successfully!",
+      });
+    } catch (error) {
+      console.error('Image analysis error:', error);
+      toast({
+        title: "Analysis Failed",
+        description: "Failed to analyze image. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAnalyzing(false);
+      setIsRunningAll(false);
+    }
   };
 
   const handleDownload = () => {
