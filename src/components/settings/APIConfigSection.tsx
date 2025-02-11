@@ -26,7 +26,7 @@ export const APIConfigSection = ({
   const handleSaveApiKey = async () => {
     setIsValidating(true);
     try {
-      const isValid = await validateApiKey();
+      const isValid = await validateApiKey(newApiKey);
       if (isValid) {
         updateApiKey(newApiKey);
       } else {
