@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useGoogleApi } from "@/hooks/use-google-api";
 
@@ -84,34 +84,40 @@ const AnalysisHandler = ({
         enableWordTimeOffsets: selectedFeatures.wordTimestamps,
         enableSpeakerDiarization: selectedFeatures.speakerDiarization,
         enableAutomaticPunctuation: true,
+        model: "latest_long",
+        useEnhanced: true,
       };
 
       const requestBody = {
-        audio: {
-          content: audioContent,
-        },
+        audio: { content: audioContent },
         config: config,
       };
 
-      const response = await fetch(`https://speech.googleapis.com/v1/speech:recognize?key=${apiKey}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
+      const response = await fetch(
+        `https://speech.googleapis.com/v1/speech:recognize?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
+      console.log("API Response:", data);
+
       const results: AnalysisResults = {};
 
       if (data.results && data.results[0]) {
         if (selectedFeatures.transcription) {
-          results.transcript = data.results[0].alternatives[0].transcript;
-          results.confidence = data.results[0].alternatives[0].confidence;
+          const alternative = data.results[0].alternatives[0];
+          results.transcript = alternative.transcript;
+          results.confidence = alternative.confidence;
         }
 
         if (selectedFeatures.wordTimestamps && data.results[0].alternatives[0].words) {
@@ -122,10 +128,15 @@ const AnalysisHandler = ({
           }));
         }
 
-        if (selectedFeatures.speakerDiarization && data.results[0].alternatives[0].speakerTags) {
-          results.speakerDiarization = data.results[0].alternatives[0].speakerTags.map(
-            (tag: any) => `Speaker ${tag.speakerTag}: ${tag.word}`
-          );
+        if (selectedFeatures.speakerDiarization && data.results[0].alternatives[0].words) {
+          const speakerLabels = data.results[0].alternatives[0].words
+            .filter((word: any) => word.speakerTag)
+            .map((word: any) => `Speaker ${word.speakerTag}: ${word.word}`);
+          results.speakerDiarization = speakerLabels;
+        }
+
+        if (selectedFeatures.languageDetection) {
+          results.languageDetection = data.results[0].languageCode || "en-US";
         }
       }
 
