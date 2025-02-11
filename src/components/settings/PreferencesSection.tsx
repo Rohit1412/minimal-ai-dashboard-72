@@ -4,16 +4,12 @@ import { Switch } from "@/components/ui/switch";
 
 interface PreferencesSectionProps {
   autoSave: boolean;
-  language: string;
   onAutoSaveChange: (value: boolean) => void;
-  onLanguageChange: (value: string) => void;
 }
 
 export const PreferencesSection = ({
   autoSave,
-  language,
   onAutoSaveChange,
-  onLanguageChange,
 }: PreferencesSectionProps) => {
   return (
     <div className="space-y-4">
@@ -29,23 +25,6 @@ export const PreferencesSection = ({
           checked={autoSave}
           onCheckedChange={onAutoSaveChange}
         />
-      </div>
-
-      <div>
-        <Label htmlFor="language" className="dark:text-gray-200">Language</Label>
-        <select
-          id="language"
-          value={language}
-          onChange={(e) => onLanguageChange(e.target.value)}
-          className="w-full mt-1 px-3 py-2 bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:text-white dark:bg-[#2A2F3C] dark:border-white/10"
-        >
-          <option value="english">English</option>
-          <option value="spanish">Spanish</option>
-          <option value="french">French</option>
-          <option value="german">German</option>
-          <option value="chinese">Chinese</option>
-          <option value="japanese">Japanese</option>
-        </select>
       </div>
     </div>
   );

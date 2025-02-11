@@ -15,7 +15,6 @@ import { useTheme } from "@/providers/ThemeProvider";
 const Settings = () => {
   const { theme: currentTheme, setTheme } = useTheme();
   const [emailNotifications, setEmailNotifications] = useState(false);
-  const [language, setLanguage] = useState(localStorage.getItem("language") || "english");
   const [apiCallLimit, setApiCallLimit] = useState("100");
   const [fontSize, setFontSize] = useState("medium");
   const [autoSave, setAutoSave] = useState(true);
@@ -57,16 +56,15 @@ const Settings = () => {
       fontSize === "large" ? "18px" : 
       fontSize === "small" ? "14px" : "16px";
 
-    // Apply language
-    document.documentElement.lang = language;
-  }, [fontSize, language]);
+    // Set default language to English
+    document.documentElement.lang = 'en';
+  }, [fontSize]);
 
   const handleSaveSettings = (e: React.FormEvent) => {
     e.preventDefault();
     
     // Store settings in localStorage
     localStorage.setItem("email_notifications", emailNotifications.toString());
-    localStorage.setItem("language", language);
     localStorage.setItem("api_call_limit", apiCallLimit);
     localStorage.setItem("font_size", fontSize);
     localStorage.setItem("auto_save", autoSave.toString());
@@ -116,9 +114,7 @@ const Settings = () => {
 
               <PreferencesSection
                 autoSave={autoSave}
-                language={language}
                 onAutoSaveChange={setAutoSave}
-                onLanguageChange={setLanguage}
               />
 
               <Button type="submit" className="w-full">
