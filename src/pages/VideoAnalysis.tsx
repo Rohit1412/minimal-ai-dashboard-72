@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import Sidebar from "@/components/Sidebar";
@@ -7,9 +8,9 @@ import { useToast } from "@/components/ui/use-toast";
 import VideoInput from "@/components/video/VideoInput";
 import FeatureSelection from "@/components/video/FeatureSelection";
 import AnalysisResults from "@/components/video/AnalysisResults";
+import VideoPreview from "@/components/video/VideoPreview";
+import { useVideoAnalysis } from "@/components/video/VideoAnalysisHandler";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useGoogleApi } from "@/hooks/use-google-api";
-import { useNavigate } from "react-router-dom";
 
 interface AnalysisResults {
   labels?: string[];
@@ -35,8 +36,15 @@ const VideoAnalysis = () => {
   
   const { toast } = useToast();
   const isMobile = useIsMobile();
-  const { apiKey, isConfigured } = useGoogleApi();
-  const navigate = useNavigate();
+
+  const { handleAnalyze } = useVideoAnalysis({
+    videoUrl,
+    videoFile,
+    setAnalysisResults,
+    selectedFeatures,
+    setIsAnalyzing,
+    setIsRunningAll,
+  });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -66,92 +74,6 @@ const VideoAnalysis = () => {
     handleAnalyze();
   };
 
-  const handleAnalyze = async () => {
-    if (!isConfigured) {
-      toast({
-        title: "API Key Required",
-        description: "Please configure your Google Cloud API key in settings first.",
-        variant: "destructive",
-      });
-      navigate('/settings');
-      return;
-    }
-
-    if (!videoUrl && !videoFile) {
-      toast({
-        title: "Error",
-        description: "Please provide a video URL or upload a file",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsAnalyzing(true);
-    try {
-      let videoContent = "";
-      if (videoFile) {
-        const reader = new FileReader();
-        videoContent = await new Promise((resolve) => {
-          reader.onload = () => resolve(reader.result as string);
-          reader.readAsDataURL(videoFile);
-        });
-      }
-
-      const requestBody = {
-        video: {
-          content: videoContent.split(',')[1]
-        },
-        features: [
-          { type: 'LABEL_DETECTION' },
-          { type: 'OBJECT_TRACKING' },
-          { type: 'TEXT_DETECTION' },
-          { type: 'EXPLICIT_CONTENT_DETECTION' },
-          { type: 'FACE_DETECTION' }
-        ]
-      };
-
-      const response = await fetch(
-        `https://videointelligence.googleapis.com/v1/videos:annotate?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestBody)
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to analyze video');
-      }
-
-      const data = await response.json();
-      
-      const results: AnalysisResults = {};
-      if (selectedFeatures.labels) results.labels = data.labelAnnotations?.map((label: any) => label.description) || [];
-      if (selectedFeatures.objects) results.objects = data.objectAnnotations?.map((obj: any) => obj.name) || [];
-      if (selectedFeatures.texts) results.texts = data.textAnnotations?.map((text: any) => text.text) || [];
-      if (selectedFeatures.explicit) results.explicit = data.explicitAnnotation?.frames[0]?.pornographyLikelihood || 'UNKNOWN';
-      if (selectedFeatures.faces) results.faces = data.faceAnnotations?.map((face: any) => `Confidence: ${face.detectionConfidence}`) || [];
-
-      setAnalysisResults(results);
-      toast({
-        title: "Analysis Complete",
-        description: "Your video has been analyzed successfully!",
-      });
-    } catch (error) {
-      console.error('Video analysis error:', error);
-      toast({
-        title: "Analysis Failed",
-        description: "Failed to analyze video. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsAnalyzing(false);
-      setIsRunningAll(false);
-    }
-  };
-
   const handleDownload = () => {
     if (!analysisResults) {
       toast({
@@ -161,7 +83,6 @@ const VideoAnalysis = () => {
       });
       return;
     }
-    // PDF generation logic will be added here
     toast({
       title: "Download Started",
       description: "Your results are being downloaded",
@@ -201,16 +122,7 @@ const VideoAnalysis = () => {
                 isRunningAll={isRunningAll}
               />
 
-              {videoUrl && (
-                <div className="aspect-video w-full bg-black/10 rounded-lg overflow-hidden" style={{ height: '40vh' }}>
-                  <iframe
-                    src={videoUrl}
-                    className="w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-              )}
+              <VideoPreview videoUrl={videoUrl} />
 
               {analysisResults && (
                 <AnalysisResults
