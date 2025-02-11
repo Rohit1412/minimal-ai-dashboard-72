@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -46,7 +47,7 @@ const App = () => {
                   path="/"
                   element={
                     <ProtectedRoute>
-                      <div className="flex">
+                      <div className="flex w-full">
                         <Sidebar />
                         <div className="flex-1">
                           <PageHeader />
@@ -60,7 +61,7 @@ const App = () => {
                   path="/analyse-video"
                   element={
                     <ProtectedRoute>
-                      <div className="flex">
+                      <div className="flex w-full">
                         <Sidebar />
                         <div className="flex-1">
                           <PageHeader />
@@ -74,7 +75,7 @@ const App = () => {
                   path="/analyse-audio"
                   element={
                     <ProtectedRoute>
-                      <div className="flex">
+                      <div className="flex w-full">
                         <Sidebar />
                         <div className="flex-1">
                           <PageHeader />
@@ -88,7 +89,7 @@ const App = () => {
                   path="/analyse-text"
                   element={
                     <ProtectedRoute>
-                      <div className="flex">
+                      <div className="flex w-full">
                         <Sidebar />
                         <div className="flex-1">
                           <PageHeader />
@@ -102,7 +103,7 @@ const App = () => {
                   path="/analyse-image"
                   element={
                     <ProtectedRoute>
-                      <div className="flex">
+                      <div className="flex w-full">
                         <Sidebar />
                         <div className="flex-1">
                           <PageHeader />
@@ -116,7 +117,7 @@ const App = () => {
                   path="/history"
                   element={
                     <ProtectedRoute>
-                      <div className="flex">
+                      <div className="flex w-full">
                         <Sidebar />
                         <div className="flex-1">
                           <PageHeader />
@@ -130,7 +131,7 @@ const App = () => {
                   path="/profile"
                   element={
                     <ProtectedRoute>
-                      <div className="flex">
+                      <div className="flex w-full">
                         <Sidebar />
                         <div className="flex-1">
                           <PageHeader />
@@ -144,7 +145,7 @@ const App = () => {
                   path="/settings"
                   element={
                     <ProtectedRoute>
-                      <div className="flex">
+                      <div className="flex w-full">
                         <Sidebar />
                         <div className="flex-1">
                           <PageHeader />
