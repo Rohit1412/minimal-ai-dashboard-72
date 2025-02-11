@@ -23,7 +23,10 @@ export const AppearanceSection = ({
         <select
           id="theme"
           value={theme}
-          onChange={(e) => onThemeChange(e.target.value)}
+          onChange={(e) => {
+            onThemeChange(e.target.value);
+            localStorage.setItem("theme", e.target.value);
+          }}
           className="w-full mt-1 px-3 py-2 bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:text-white dark:bg-[#2A2F3C] dark:border-white/10"
         >
           <option value="system">System</option>
@@ -37,7 +40,10 @@ export const AppearanceSection = ({
         <select
           id="fontSize"
           value={fontSize}
-          onChange={(e) => onFontSizeChange(e.target.value)}
+          onChange={(e) => {
+            onFontSizeChange(e.target.value);
+            localStorage.setItem("fontSize", e.target.value);
+          }}
           className="w-full mt-1 px-3 py-2 bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:text-white dark:bg-[#2A2F3C] dark:border-white/10"
         >
           <option value="small">Small</option>

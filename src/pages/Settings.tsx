@@ -10,13 +10,13 @@ import { APIConfigSection } from "@/components/settings/APIConfigSection";
 import { AppearanceSection } from "@/components/settings/AppearanceSection";
 import { NotificationsSection } from "@/components/settings/NotificationsSection";
 import { PreferencesSection } from "@/components/settings/PreferencesSection";
+import { useTheme } from "@/providers/ThemeProvider";
 
 const Settings = () => {
+  const { theme: currentTheme, setTheme } = useTheme();
   const [emailNotifications, setEmailNotifications] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
   const [language, setLanguage] = useState("english");
   const [apiCallLimit, setApiCallLimit] = useState("100");
-  const [theme, setTheme] = useState("system");
   const [fontSize, setFontSize] = useState("medium");
   const [autoSave, setAutoSave] = useState(true);
   const [dataRetention, setDataRetention] = useState("30");
@@ -32,20 +32,16 @@ const Settings = () => {
   useEffect(() => {
     // Load saved settings from localStorage
     const savedEmailNotifications = localStorage.getItem("email_notifications") === "true";
-    const savedDarkMode = localStorage.getItem("dark_mode") === "true";
     const savedLanguage = localStorage.getItem("language") || "english";
     const savedApiCallLimit = localStorage.getItem("api_call_limit") || "100";
-    const savedTheme = localStorage.getItem("theme") || "system";
     const savedFontSize = localStorage.getItem("font_size") || "medium";
     const savedAutoSave = localStorage.getItem("auto_save") !== "false";
     const savedDataRetention = localStorage.getItem("data_retention") || "30";
     const savedNotifications = JSON.parse(localStorage.getItem("notifications") || "{}");
 
     setEmailNotifications(savedEmailNotifications);
-    setDarkMode(savedDarkMode);
     setLanguage(savedLanguage);
     setApiCallLimit(savedApiCallLimit);
-    setTheme(savedTheme);
     setFontSize(savedFontSize);
     setAutoSave(savedAutoSave);
     setDataRetention(savedDataRetention);
@@ -57,25 +53,27 @@ const Settings = () => {
       security: true,
       ...savedNotifications,
     });
-  }, []);
+
+    // Apply font size
+    document.documentElement.style.fontSize = 
+      fontSize === "large" ? "18px" : 
+      fontSize === "small" ? "14px" : "16px";
+
+    // Apply language
+    document.documentElement.lang = language;
+  }, [fontSize, language]);
 
   const handleSaveSettings = (e: React.FormEvent) => {
     e.preventDefault();
     
     // Store settings in localStorage
     localStorage.setItem("email_notifications", emailNotifications.toString());
-    localStorage.setItem("dark_mode", darkMode.toString());
     localStorage.setItem("language", language);
     localStorage.setItem("api_call_limit", apiCallLimit);
-    localStorage.setItem("theme", theme);
     localStorage.setItem("font_size", fontSize);
     localStorage.setItem("auto_save", autoSave.toString());
     localStorage.setItem("data_retention", dataRetention);
     localStorage.setItem("notifications", JSON.stringify(notifications));
-
-    // Apply settings
-    document.documentElement.setAttribute("data-theme", theme);
-    document.documentElement.style.fontSize = fontSize === "large" ? "18px" : fontSize === "small" ? "14px" : "16px";
 
     toast.success("Settings saved successfully!");
   };
@@ -107,7 +105,7 @@ const Settings = () => {
               />
 
               <AppearanceSection
-                theme={theme}
+                theme={currentTheme}
                 fontSize={fontSize}
                 onThemeChange={setTheme}
                 onFontSizeChange={setFontSize}
