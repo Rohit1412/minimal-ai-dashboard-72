@@ -15,7 +15,7 @@ import { useTheme } from "@/providers/ThemeProvider";
 const Settings = () => {
   const { theme: currentTheme, setTheme } = useTheme();
   const [emailNotifications, setEmailNotifications] = useState(false);
-  const [language, setLanguage] = useState("english");
+  const [language, setLanguage] = useState(localStorage.getItem("language") || "english");
   const [apiCallLimit, setApiCallLimit] = useState("100");
   const [fontSize, setFontSize] = useState("medium");
   const [autoSave, setAutoSave] = useState(true);
@@ -32,7 +32,6 @@ const Settings = () => {
   useEffect(() => {
     // Load saved settings from localStorage
     const savedEmailNotifications = localStorage.getItem("email_notifications") === "true";
-    const savedLanguage = localStorage.getItem("language") || "english";
     const savedApiCallLimit = localStorage.getItem("api_call_limit") || "100";
     const savedFontSize = localStorage.getItem("font_size") || "medium";
     const savedAutoSave = localStorage.getItem("auto_save") !== "false";
@@ -40,7 +39,6 @@ const Settings = () => {
     const savedNotifications = JSON.parse(localStorage.getItem("notifications") || "{}");
 
     setEmailNotifications(savedEmailNotifications);
-    setLanguage(savedLanguage);
     setApiCallLimit(savedApiCallLimit);
     setFontSize(savedFontSize);
     setAutoSave(savedAutoSave);
