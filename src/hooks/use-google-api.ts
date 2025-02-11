@@ -12,19 +12,35 @@ export const useGoogleApi = () => {
     }
   }, []);
 
-  const updateApiKey = (newKey: string) => {
-    localStorage.setItem('google_api_key', newKey);
-    setApiKey(newKey);
-    toast.success('Google API key updated successfully');
+  const updateApiKey = async (newKey: string) => {
+    try {
+      // Validate the API key before saving
+      const isValid = await validateApiKey(newKey);
+      if (isValid) {
+        localStorage.setItem('google_api_key', newKey);
+        setApiKey(newKey);
+        toast.success('Google API key updated and validated successfully');
+      } else {
+        toast.error('Invalid Google API key. Please check and try again.');
+      }
+    } catch (error) {
+      console.error('Error updating API key:', error);
+      toast.error('Failed to validate API key. Please try again.');
+    }
   };
 
-  const validateApiKey = async (): Promise<boolean> => {
-    if (!apiKey) return false;
+  const validateApiKey = async (key: string): Promise<boolean> => {
+    if (!key) return false;
 
     try {
       const response = await fetch(
-        `https://speech.googleapis.com/v1/operations?key=${apiKey}`,
-        { method: 'GET' }
+        `https://speech.googleapis.com/v1/operations?key=${key}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
       );
       return response.ok;
     } catch (error) {
@@ -37,6 +53,6 @@ export const useGoogleApi = () => {
     apiKey,
     isConfigured: !!apiKey,
     updateApiKey,
-    validateApiKey
+    validateApiKey,
   };
 };
