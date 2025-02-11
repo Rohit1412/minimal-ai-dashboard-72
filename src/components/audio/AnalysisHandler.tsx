@@ -36,6 +36,20 @@ const AnalysisHandler = ({
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isRunningAll, setIsRunningAll] = useState(false);
 
+  const convertAudioToBase64 = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          const base64Audio = reader.result.split(',')[1];
+          resolve(base64Audio);
+        }
+      };
+      reader.onerror = error => reject(error);
+    });
+  };
+
   const handleAnalyze = async () => {
     if (!isConfigured) {
       toast({
@@ -58,28 +72,64 @@ const AnalysisHandler = ({
 
     setIsAnalyzing(true);
     try {
-      const formData = new FormData();
+      let audioContent = "";
       if (audioFile) {
-        formData.append("audio", audioFile);
-      } else if (audioUrl) {
-        formData.append("audioUrl", audioUrl);
+        audioContent = await convertAudioToBase64(audioFile);
       }
 
-      formData.append("features", JSON.stringify(selectedFeatures));
-      formData.append("apiKey", apiKey);
+      const config = {
+        encoding: "LINEAR16",
+        sampleRateHertz: 16000,
+        languageCode: "en-US",
+        enableWordTimeOffsets: selectedFeatures.wordTimestamps,
+        enableSpeakerDiarization: selectedFeatures.speakerDiarization,
+        enableAutomaticPunctuation: true,
+      };
 
-      const response = await fetch("https://api.yourdomain.com/analyze-audio", {
+      const requestBody = {
+        audio: {
+          content: audioContent,
+        },
+        config: config,
+      };
+
+      const response = await fetch(`https://speech.googleapis.com/v1/speech:recognize?key=${apiKey}`, {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to analyze audio");
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      onResultsUpdate(data);
+      const results: AnalysisResults = {};
 
+      if (data.results && data.results[0]) {
+        if (selectedFeatures.transcription) {
+          results.transcript = data.results[0].alternatives[0].transcript;
+          results.confidence = data.results[0].alternatives[0].confidence;
+        }
+
+        if (selectedFeatures.wordTimestamps && data.results[0].alternatives[0].words) {
+          results.wordTimestamps = data.results[0].alternatives[0].words.map((word: any) => ({
+            word: word.word,
+            startTime: word.startTime,
+            endTime: word.endTime,
+          }));
+        }
+
+        if (selectedFeatures.speakerDiarization && data.results[0].alternatives[0].speakerTags) {
+          results.speakerDiarization = data.results[0].alternatives[0].speakerTags.map(
+            (tag: any) => `Speaker ${tag.speakerTag}: ${tag.word}`
+          );
+        }
+      }
+
+      onResultsUpdate(results);
       toast({
         title: "Analysis Complete",
         description: "Audio analysis completed successfully.",
