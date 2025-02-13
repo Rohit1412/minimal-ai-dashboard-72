@@ -42,26 +42,26 @@ const PoliceAI = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('https://api.blackbox.ai/api/chat', {
-        messages: [
-          { role: 'system', content: systemPrompt },
-          ...messages.map(msg => ({
-            role: msg.role,
-            content: msg.content
-          })),
-          { role: 'user', content }
-        ],
+      const response = await axios.post('https://api.blackbox.ai/v3/chat', {
+        prompt: content,
+        numResults: 1,
+        maxTokens: 1024,
         model: 'mistralai/Mistral-Small-24B-Instruct-2501',
-        max_tokens: '1024'
+        system: systemPrompt,
+        temperature: 0.7,
+        topK: 50,
+        topP: 0.7,
+        context: messages.map(msg => ({ role: msg.role, content: msg.content }))
       }, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         }
       });
 
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: response.data.choices[0].message.content,
+        content: response.data.response,
         role: "assistant",
         timestamp: new Date(),
       };
