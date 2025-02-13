@@ -11,6 +11,7 @@ import AnalysisResults from "@/components/video/AnalysisResults";
 import VideoPreview from "@/components/video/VideoPreview";
 import { useVideoAnalysis } from "@/components/video/VideoAnalysisHandler";
 import { useIsMobile } from "@/hooks/use-mobile";
+import AnalysisStatus from "@/components/common/AnalysisStatus";
 
 interface AnalysisResults {
   labels?: string[];
@@ -98,10 +99,11 @@ const VideoAnalysis = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex items-center gap-2 mb-8">
-            <Video className="w-6 h-6 text-primary" />
-            <h1 className="text-3xl font-bold text-primary dark:text-white">Video Analysis</h1>
-          </div>
+          <AnalysisStatus 
+            title="Video Analysis"
+            description="Analyze your videos for content, objects, and more"
+            icon={Video}
+          />
 
           <Card className="p-6 backdrop-blur-sm bg-background/80 border-border shadow-lg dark:bg-[#1A1F2C] dark:border-white/10">
             <div className="space-y-4">

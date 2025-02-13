@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import Sidebar from "@/components/Sidebar";
@@ -10,6 +11,7 @@ import AnalysisResults from "@/components/text/AnalysisResults";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useGoogleApi } from "@/hooks/use-google-api";
 import { useNavigate } from "react-router-dom";
+import AnalysisStatus from "@/components/common/AnalysisStatus";
 
 interface AnalysisResults {
   entities?: string[];
@@ -187,10 +189,11 @@ const TextAnalysis = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex items-center gap-2 mb-8">
-            <FileText className="w-6 h-6 text-primary" />
-            <h1 className="text-3xl font-bold text-primary dark:text-white">Text Analysis</h1>
-          </div>
+          <AnalysisStatus 
+            title="Text Analysis"
+            description="Analyze your text for entities, sentiment, syntax, and more"
+            icon={FileText}
+          />
 
           <Card className="p-6 backdrop-blur-sm bg-background/80 border-border shadow-lg dark:bg-[#1A1F2C] dark:border-white/10">
             <div className="space-y-4">
