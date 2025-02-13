@@ -55,8 +55,7 @@ const PoliceAI = () => {
         max_tokens: '1024'
       }, {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.BLACKBOX_API_KEY}`
+          'Content-Type': 'application/json'
         }
       });
 
