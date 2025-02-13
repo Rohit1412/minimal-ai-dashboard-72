@@ -30,7 +30,7 @@ const Login = () => {
     }
   };
   return <div className="min-h-screen flex items-center justify-center bg-background">
-      <Card className="w-full max-w-md p-8 space-y-6 dark:bg-[#1A1F2C] dark:border-white/10 px-[55px] py-[21px]">
+      <Card className="w-full max-w-md p-8 space-y-6 dark:bg-[#1A1F2C] dark:border-white/10 py-[26px] px-[44px]">
         <div className="text-center">
           <h1 className="text-3xl font-bold dark:text-white">Welcome Back</h1>
           <p className="text-muted-foreground mt-2">Sign in to your account</p>
