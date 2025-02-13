@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
@@ -10,6 +9,7 @@ import ChatMessage from "@/components/chat/ChatMessage";
 import ChatInput from "@/components/chat/ChatInput";
 import { Message } from "@/types/chat";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import axios from "axios";
 
 const systemPrompt = `You are an AI assistant specifically designed to help Indian police officers. Your role includes:
 
@@ -41,31 +41,27 @@ const PoliceAI = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://api.nbox.ai/api/v1/chat/completions', {
-        method: 'POST',
+      const response = await axios.post('https://api.blackbox.ai/api/chat', {
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...messages.map(msg => ({
+            role: msg.role,
+            content: msg.content
+          })),
+          { role: 'user', content }
+        ],
+        model: 'mistralai/Mistral-Small-24B-Instruct-2501',
+        max_tokens: '1024'
+      }, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.NBOX_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: 'llama2-chat-13b-4k',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            ...messages.map(msg => ({
-              role: msg.role,
-              content: msg.content
-            })),
-            { role: 'user', content }
-          ],
-          temperature: 0.7,
-          max_tokens: 2000,
-        }),
+          'Authorization': `Bearer ${process.env.BLACKBOX_API_KEY}`
+        }
       });
 
-      const data = await response.json();
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: data.choices[0].message.content,
+        content: response.data.choices[0].message.content,
         role: "assistant",
         timestamp: new Date(),
       };
@@ -77,6 +73,7 @@ const PoliceAI = () => {
         description: "Failed to send message. Please try again.",
         variant: "destructive",
       });
+      console.error('Chat error:', error);
     } finally {
       setIsLoading(false);
     }

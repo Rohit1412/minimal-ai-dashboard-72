@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -16,6 +15,7 @@ import History from "./pages/History";
 import Login from "./pages/Login";
 import AudioAnalysis from "./pages/AudioAnalysis";
 import Chatbot from "./pages/Chatbot";
+import PoliceAI from "./pages/PoliceAI";
 import PageHeader from "./components/PageHeader";
 import Sidebar from "./components/Sidebar";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -53,6 +53,20 @@ const App = () => {
                         <div className="flex-1">
                           <PageHeader />
                           <Index />
+                        </div>
+                      </div>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/police-ai"
+                  element={
+                    <ProtectedRoute>
+                      <div className="flex w-full">
+                        <Sidebar />
+                        <div className="flex-1">
+                          <PageHeader />
+                          <PoliceAI />
                         </div>
                       </div>
                     </ProtectedRoute>
