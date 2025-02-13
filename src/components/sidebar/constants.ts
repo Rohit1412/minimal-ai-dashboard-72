@@ -7,11 +7,13 @@ import {
   Image as ImageIcon,
   History,
   Settings,
-  UserCircle2
+  UserCircle2,
+  Shield
 } from "lucide-react";
 
 export const menuItems = [
   { icon: Home, label: "Home", href: "/" },
+  { icon: Shield, label: "Police AI", href: "/police-ai" },
   { icon: Video, label: "Analyse Video", href: "/analyse-video" },
   { icon: AudioLines, label: "Analyse Audio", href: "/analyse-audio" },
   { icon: FileText, label: "Analyse Text", href: "/analyse-text" },
