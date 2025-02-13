@@ -1,4 +1,3 @@
-
 import { Card } from "@/components/ui/card";
 import Sidebar from "@/components/Sidebar";
 import { BarChart3, BrainCircuit, Sparkles, TrendingUp } from "lucide-react";
@@ -7,15 +6,23 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { APP_TITLE } from "@/constants/text";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { useQuery } from "@tanstack/react-query";
-
 interface UsageData {
   name: string;
   apiCalls: number;
   analysedData: number;
   accuracy: number;
-  apiUsage: { name: string; calls: number; }[];
-  fileTypes: { name: string; files: number; }[];
-  accuracyTrend: { name: string; accuracy: number; }[];
+  apiUsage: {
+    name: string;
+    calls: number;
+  }[];
+  fileTypes: {
+    name: string;
+    files: number;
+  }[];
+  accuracyTrend: {
+    name: string;
+    accuracy: number;
+  }[];
 }
 
 // Mock data for development
@@ -24,31 +31,53 @@ const mockUsageData: UsageData = {
   apiCalls: 1250,
   analysedData: 847,
   accuracy: 95.7,
-  apiUsage: [
-    { name: "Jan", calls: 400 },
-    { name: "Feb", calls: 300 },
-    { name: "Mar", calls: 550 },
-    { name: "Apr", calls: 450 },
-    { name: "May", calls: 650 },
-  ],
-  fileTypes: [
-    { name: "PDF", files: 145 },
-    { name: "DOC", files: 85 },
-    { name: "TXT", files: 215 },
-    { name: "JSON", files: 122 },
-  ],
-  accuracyTrend: [
-    { name: "Week 1", accuracy: 91 },
-    { name: "Week 2", accuracy: 93 },
-    { name: "Week 3", accuracy: 94.5 },
-    { name: "Week 4", accuracy: 95.7 },
-  ]
+  apiUsage: [{
+    name: "Jan",
+    calls: 400
+  }, {
+    name: "Feb",
+    calls: 300
+  }, {
+    name: "Mar",
+    calls: 550
+  }, {
+    name: "Apr",
+    calls: 450
+  }, {
+    name: "May",
+    calls: 650
+  }],
+  fileTypes: [{
+    name: "PDF",
+    files: 145
+  }, {
+    name: "DOC",
+    files: 85
+  }, {
+    name: "TXT",
+    files: 215
+  }, {
+    name: "JSON",
+    files: 122
+  }],
+  accuracyTrend: [{
+    name: "Week 1",
+    accuracy: 91
+  }, {
+    name: "Week 2",
+    accuracy: 93
+  }, {
+    name: "Week 3",
+    accuracy: 94.5
+  }, {
+    name: "Week 4",
+    accuracy: 95.7
+  }]
 };
-
 const fetchUsageData = async (): Promise<UsageData> => {
   // For development, return mock data
   return Promise.resolve(mockUsageData);
-  
+
   // TODO: Uncomment and modify when backend is ready
   // const response = await fetch('YOUR_ACTUAL_API_ENDPOINT');
   // if (!response.ok) {
@@ -56,43 +85,43 @@ const fetchUsageData = async (): Promise<UsageData> => {
   // }
   // return response.json();
 };
-
 const Index = () => {
-  const { data: usageData, isLoading, error } = useQuery({
+  const {
+    data: usageData,
+    isLoading,
+    error
+  } = useQuery({
     queryKey: ['usageData'],
     queryFn: fetchUsageData,
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: 30000 // Refresh every 30 seconds
   });
-
   const isMobile = useIsMobile();
-
   if (isLoading) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
-
   if (error) {
     return <div className="flex items-center justify-center min-h-screen">Error loading data</div>;
   }
-
   if (!usageData) {
     return null;
   }
-
-  return (
-    <div className="min-h-screen bg-background font-archivo">
-      <div className="h-[80px] w-full bg-background fixed top-0 z-40 border-none flex items-center justify-center">
+  return <div className="min-h-screen bg-background font-archivo">
+      <div className="h-[60px] w-full bg-background fixed top-0 z-40 border-none flex items-center justify-center rounded-full">
         <h1 className={`font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent ${isMobile ? 'text-lg' : 'text-2xl'}`}>
           {APP_TITLE}
         </h1>
       </div>
       <Sidebar />
       <main className={`min-h-screen ${isMobile ? 'w-full px-4' : 'w-[80vw] ml-auto mr-[10vw] px-8'} pt-[calc(80px+5vh)] pb-8`}>
-        <motion.header 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8 text-left"
-        >
+        <motion.header initial={{
+        opacity: 0,
+        y: 20
+      }} animate={{
+        opacity: 1,
+        y: 0
+      }} transition={{
+        duration: 0.5
+      }} className="mb-8 text-left">
           <div className="flex items-center gap-2">
             <h2 className={`${isMobile ? 'text-2xl' : 'text-4xl'} font-bold text-muted-foreground dark:text-white`}>Welcome,</h2>
             <h1 className={`${isMobile ? 'text-2xl' : 'text-4xl'} font-bold text-primary dark:text-[#D6BCFA]`}>{usageData.name}</h1>
@@ -188,13 +217,7 @@ const Index = () => {
                       <XAxis dataKey="name" stroke="#888888" fontSize={12} />
                       <YAxis stroke="#888888" fontSize={12} />
                       <Tooltip />
-                      <Area 
-                        type="monotone" 
-                        dataKey="accuracy" 
-                        stroke="#10B981" 
-                        fill="#10B981" 
-                        fillOpacity={0.2} 
-                      />
+                      <Area type="monotone" dataKey="accuracy" stroke="#10B981" fill="#10B981" fillOpacity={0.2} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -203,9 +226,6 @@ const Index = () => {
           </Card>
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
-
