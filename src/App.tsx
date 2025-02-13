@@ -15,6 +15,7 @@ import Settings from "./pages/Settings";
 import History from "./pages/History";
 import Login from "./pages/Login";
 import AudioAnalysis from "./pages/AudioAnalysis";
+import Chatbot from "./pages/Chatbot";
 import PageHeader from "./components/PageHeader";
 import Sidebar from "./components/Sidebar";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -108,6 +109,20 @@ const App = () => {
                         <div className="flex-1">
                           <PageHeader />
                           <ImageAnalysis />
+                        </div>
+                      </div>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/chatbot"
+                  element={
+                    <ProtectedRoute>
+                      <div className="flex w-full">
+                        <Sidebar />
+                        <div className="flex-1">
+                          <PageHeader />
+                          <Chatbot />
                         </div>
                       </div>
                     </ProtectedRoute>
